@@ -29,6 +29,9 @@ setup(
     extras_require={
         "dev": [
             "pytest>=3.7",
+            "setuptools-rust",
+            "twine",
+            "tox",
         ]
     },
 )
