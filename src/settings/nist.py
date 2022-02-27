@@ -16,7 +16,7 @@ class NistSettingsFactory:
             defaults = dict_from["defaults"]
             test_ids = tools.misc.parse_test_ids(defaults["test-ids"])
             stream_size = int(defaults["stream-size"])
-            stream_count = int(defaults["strea-count"])
+            stream_count = int(defaults["stream-count"])
             nist_settings = NistSettings(test_ids, stream_size, stream_count)
         except:
             raise RuntimeError("Nist settings don't contain required fields")
