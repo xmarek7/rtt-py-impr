@@ -11,6 +11,8 @@ class LoggerSettings:
             "tu01-rabbit-dir",
             "tu01-alphabit-dir",
             "tu01-blockalphabit-dir",
+            "fips-dir",
+            "bsi-dir",
         ]
         self.dir_prefix = None
         self.run_log_dir = None
@@ -22,6 +24,8 @@ class LoggerSettings:
         self.tu01_rabbit_dir = None
         self.tu01_alphabit_dir = None
         self.tu01_blockalphabit_dir = None
+        self.fips_dir = None
+        self.bsi_dir = None
         for key in self.config_entries:
             setattr(self, key.replace('-', '_'), dict_from.get(key))
 
@@ -48,6 +52,8 @@ class FileStorageSettings:
             "tu01-rabbit-dir",
             "tu01-alphabit-dir",
             "tu01-blockalphabit-dir",
+            "fips-dir",
+            "bsi-dir",
         ]
         self.main_file = None
         self.dir_prefix = None
@@ -59,6 +65,8 @@ class FileStorageSettings:
         self.tu01_rabbit_dir = None
         self.tu01_alphabit_dir = None
         self.tu01_blockalphabit_dir = None
+        self.fips_dir = None
+        self.bsi_dir = None
         for key in self.config_entries:
             setattr(self, key.replace('-', '_'), dict_from.get(key))
 
@@ -78,10 +86,14 @@ class BinariesSettings:
             "nist-sts",
             "dieharder",
             "testu01",
+            "fips",
+            "bsi",
         ]
         self.nist_sts = None
         self.dieharder = None
         self.testu01 = None
+        self.fips = None
+        self.bsi = None
         for key in self.config_entries:
             setattr(self, key.replace('-', '_'), dict_from.get(key))
 
