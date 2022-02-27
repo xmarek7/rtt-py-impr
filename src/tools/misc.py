@@ -16,7 +16,7 @@ def parse_test_ids(test_ids: list) -> list:
             if '-' in id_or_range:  # user provided a range
                 _range = id_or_range.split('-')
                 assert len(_range) == 2 # the split of "1-5" is always of size 2
-                for tid in range(int(_range[0]), int(_range[1])):
+                for tid in range(int(_range[0]), int(_range[1]) + 1):
                     out.append(tid)
             else: # id_or_range represents only a test id
                 tid = int(id_or_range)

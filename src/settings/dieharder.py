@@ -7,18 +7,18 @@ class DieharderVariant:
         self.psamples = psamples
 
 
-class DieharderSpecificSettings:
+class DieharderTestIdSetting:
     def __init__(self, test_id, variants: list):
         self.test_id = test_id
         self.variants = variants
 
 
 class DieharderSettings:
-    def __init__(self, test_ids: list, default_psamples, variants: list):
+    def __init__(self, test_ids: list, default_psamples, test_configs: list):
         self.test_ids = test_ids
         self.default_psamples = default_psamples
-        self.variants = variants
-        
+        self.per_test_config = test_configs
+
     def __str__(self):
         __out = "# " + str(self.__class__.__name__) + " {\n"
         __out += "\tTest IDs: " + ", ".join(str(x) for x in self.test_ids)
@@ -32,10 +32,10 @@ class DieharderSettingsFactory:
             defaults = dict_from["defaults"]
             default_test_ids = parse_test_ids(defaults["test-ids"])
             default_psamples = defaults["psamples"]
-            specific_settings = list()
-            for tid in default_test_ids:  # fill specific_settings array with default settings, override later
-                specific_settings.append(DieharderSpecificSettings(
-                    tid, [DieharderVariant("", default_psamples)]))
+            per_tid_settings = list()
+            for tid in default_test_ids:  # fill per_tid_settings array with default settings, override later
+                per_tid_settings.append(DieharderTestIdSetting(
+                    tid, [DieharderVariant("", default_psamples)])) # defaults for each test id
             specific_settings_raw = dict_from["test-specific-settings"]
             for specs in specific_settings_raw:
                 tid = int(specs["test-id"])
@@ -48,12 +48,12 @@ class DieharderSettingsFactory:
                 else:
                     psamples = specs["psamples"]
                     variants.append(DieharderVariant("", psamples))
-                for i in range(len(specific_settings)):
-                    if specific_settings[i] == tid:
-                        specific_settings[i].variants = variants
+                for i in range(len(per_tid_settings)):
+                    if per_tid_settings[i].test_id == tid:
+                        per_tid_settings[i].variants = variants
                         break
             dieharder_settings = DieharderSettings(
-                default_test_ids, default_psamples, specific_settings)
+                default_test_ids, default_psamples, per_tid_settings)
         except:
             raise RuntimeError(
                 "Dieharder settings don't contain required fields")
