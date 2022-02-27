@@ -1,0 +1,5 @@
+include *.txt
+recursive-include src *.py
+recursive-include tests *.json
+recursive-include tests *.py
+recursive-include tests *.rnd
