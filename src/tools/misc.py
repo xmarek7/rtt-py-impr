@@ -25,3 +25,21 @@ def parse_test_ids(test_ids: list) -> list:
         raise RuntimeError(
             "Check your batteries settings JSON file for default Dieharder test-ids")
     return out
+
+
+def nist_test_ids_to_param(nist_test_ids: list) -> str:
+    """Takes list of test-ids from 1-15 and returns a corresponding parameter of a nist-sts executable
+
+    Args:
+        nist_test_ids (list): List of unique test ids from 1-15
+
+    Returns:
+        str: String to pass as a parameter for nist-battery executable, i.e. 111111111111111 (all tests enabled)
+    """
+    out = ''
+    for i in range(15):
+        if i + 1 in nist_test_ids:
+            out += '1'
+        else:
+            out += '0'
+    return out

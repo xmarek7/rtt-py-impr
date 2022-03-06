@@ -10,7 +10,9 @@
             "tu01-bigcrush-dir": "testu01/bigcrush",
             "tu01-rabbit-dir": "testu01/rabbit",
             "tu01-alphabit-dir": "testu01/alphabit",
-            "tu01-blockalphabit-dir": "testu01/blockalphabit"
+            "tu01-blockalphabit-dir": "testu01/blockalphabit",
+            "bsi-dir": "bsi",
+            "fips-dir": "fips"
         },
         
         "result-storage": {
@@ -24,14 +26,9 @@
                 "tu01-bigcrush-dir": "testu01/bigcrush",
                 "tu01-rabbit-dir": "testu01/rabbit",
                 "tu01-alphabit-dir": "testu01/alphabit",
-                "tu01-blockalphabit-dir": "testu01/blockalphabit"
-            },
-            
-            "mysql-db": {
-                "address": "",
-                "name": "",
-                "port": "",
-                "credentials-file": ""
+                "tu01-blockalphabit-dir": "testu01/blockalphabit",
+                "bsi-dir": "bsi",
+                "fips-dir": "fips"
             }
         },
         
