@@ -54,9 +54,11 @@ class TestBsiParsing(unittest.TestCase):
 
 
 class TestBsiError(unittest.TestCase):
-    def test_expect_error_no_uniform(self):
-        with pytest.raises(RuntimeError):
-            BsiSettings(json.loads(NO_UNIFORM_JSON)["bsi-settings"])
+    def test_expect_uniform_none(self):
+        bsi = BsiSettings(json.loads(NO_UNIFORM_JSON)["bsi-settings"])
+        assert not bsi.uniform_dist_K
+        assert not bsi.uniform_dist_N
+        assert not bsi.uniform_dist_A
 
     def test_expect_error_uniform_param(self):
         with pytest.raises(RuntimeError):

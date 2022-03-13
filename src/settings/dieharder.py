@@ -2,19 +2,19 @@ from tools.misc import parse_test_ids
 
 
 class DieharderVariant:
-    def __init__(self, arguments, psamples):
+    def __init__(self, arguments: 'list[str]', psamples):
         self.arguments = arguments
         self.psamples = psamples
 
 
 class DieharderTestIdSetting:
-    def __init__(self, test_id, variants: list):
+    def __init__(self, test_id, variants: 'list[DieharderVariant]'):
         self.test_id = test_id
         self.variants = variants
 
 
 class DieharderSettings:
-    def __init__(self, test_ids: list, default_psamples, test_configs: list):
+    def __init__(self, test_ids: list, default_psamples, test_configs: 'list[DieharderTestIdSetting]'):
         self.test_ids = test_ids
         self.default_psamples = default_psamples
         self.per_test_config = test_configs
@@ -35,7 +35,7 @@ class DieharderSettingsFactory:
             per_tid_settings = list()
             for tid in default_test_ids:  # fill per_tid_settings array with default settings, override later
                 per_tid_settings.append(DieharderTestIdSetting(
-                    tid, [DieharderVariant("", default_psamples)])) # defaults for each test id
+                    tid, [DieharderVariant([""], default_psamples)])) # defaults for each test id
             specific_settings_raw = dict_from["test-specific-settings"]
             for specs in specific_settings_raw:
                 tid = int(specs["test-id"])
@@ -44,7 +44,7 @@ class DieharderSettingsFactory:
                 if variants_raw:
                     for variant in variants_raw:
                         variants.append(DieharderVariant(
-                            variant["arguments"], variant["psamples"]))
+                            variant["arguments"].split(" "), variant["psamples"]))
                 else:
                     psamples = specs["psamples"]
                     variants.append(DieharderVariant("", psamples))

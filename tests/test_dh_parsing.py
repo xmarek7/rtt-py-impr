@@ -53,7 +53,7 @@ class TestDieharderParsing(unittest.TestCase):
                 test_id_4 = i
         assert len(test_id_4.variants) == 1
         assert type(test_id_4.variants[0]) == type(DieharderVariant("", 0))
-        assert test_id_4.variants[0].arguments == "-n 1"
+        assert test_id_4.variants[0].arguments == ["-n", "1"]
         assert test_id_4.variants[0].psamples == 12
 
 if __name__ == "__main__":
