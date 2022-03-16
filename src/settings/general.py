@@ -1,7 +1,9 @@
+import os
+
 class LoggerSettings:
     def __init__(self, dict_from: dict):
+        self.dir_prefix = dict_from["dir-prefix"]
         self.config_entries = [
-            "dir-prefix",
             "run-log-dir",
             "dieharder-dir",
             "nist-sts-dir",
@@ -14,7 +16,6 @@ class LoggerSettings:
             "fips-dir",
             "bsi-dir",
         ]
-        self.dir_prefix = None
         self.run_log_dir = None
         self.dieharder_dir = None
         self.nist_sts_dir = None
@@ -27,7 +28,7 @@ class LoggerSettings:
         self.fips_dir = None
         self.bsi_dir = None
         for key in self.config_entries:
-            setattr(self, key.replace('-', '_'), dict_from.get(key))
+            setattr(self, key.replace('-', '_'), os.path.join(self.dir_prefix, dict_from[key]))
 
     def __str__(self):
         __str = "# " + self.__class__.__name__ + " {\n"
@@ -41,9 +42,9 @@ class LoggerSettings:
 
 class FileStorageSettings:
     def __init__(self, dict_from: dict):
+        self.main_file = dict_from["main-file"]
+        self.dir_prefix = dict_from["dir-prefix"]
         self.config_entries = [
-            "main-file",
-            "dir-prefix",
             "dieharder-dir",
             "nist-sts-dir",
             "tu01-smallcrush-dir",
@@ -55,8 +56,6 @@ class FileStorageSettings:
             "fips-dir",
             "bsi-dir",
         ]
-        self.main_file = None
-        self.dir_prefix = None
         self.dieharder_dir = None
         self.nist_sts_dir = None
         self.tu01_smallcrush_dir = None
@@ -68,7 +67,7 @@ class FileStorageSettings:
         self.fips_dir = None
         self.bsi_dir = None
         for key in self.config_entries:
-            setattr(self, key.replace('-', '_'), dict_from.get(key))
+            setattr(self, key.replace('-', '_'), os.path.join(self.dir_prefix, dict_from[key]))
 
     def __str__(self):
         __str = "# " + self.__class__.__name__ + " {\n"

@@ -1,7 +1,7 @@
 {
     "toolkit-settings": {
         "logger": {
-            "dir-prefix": "results/logs",
+            "dir-prefix": "rtt-results/logs",
             "run-log-dir": "run-logs",
             "dieharder-dir": "dieharder",
             "nist-sts-dir": "niststs",
@@ -17,8 +17,8 @@
         
         "result-storage": {
             "file": {
-                "main-file": "results/testbed-table.txt",
-                "dir-prefix": "results/reports",
+                "main-file": "rtt-results/testbed-table.txt",
+                "dir-prefix": "rtt-results/reports",
                 "dieharder-dir": "dieharder",
                 "nist-sts-dir": "niststs",
                 "tu01-smallcrush-dir": "testu01/smallcrush",
@@ -35,7 +35,9 @@
         "binaries": {
             "nist-sts": "/ws/rtt-statistical-batteries/nist-sts",
             "dieharder": "/ws/rtt-statistical-batteries/dieharder",
-            "testu01": "/ws/rtt-statistical-batteries/testu01"
+            "testu01": "/ws/rtt-statistical-batteries/testu01",
+            "bsi": "/ws/rtt-statistical-batteries/bsi-src/build_ubuntu/bsi_battery",
+            "fips": "/ws/rtt-statistical-batteries/fips-src/build_ubuntu/fips_battery"
         },
         
         "miscellaneous": {

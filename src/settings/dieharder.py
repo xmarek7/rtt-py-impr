@@ -35,7 +35,7 @@ class DieharderSettingsFactory:
             per_tid_settings = list()
             for tid in default_test_ids:  # fill per_tid_settings array with default settings, override later
                 per_tid_settings.append(DieharderTestIdSetting(
-                    tid, [DieharderVariant([""], default_psamples)])) # defaults for each test id
+                    tid, [DieharderVariant([], default_psamples)]))  # defaults for each test id
             specific_settings_raw = dict_from["test-specific-settings"]
             for specs in specific_settings_raw:
                 tid = int(specs["test-id"])

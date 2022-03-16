@@ -1,5 +1,14 @@
 {
     "randomness-testing-toolkit": {
+        "bsi-settings": {
+            "test-ids": ["0-8"],
+            "uniform-distribution": {
+                "K-param": 123,
+                "N-param": 456,
+                "A-param": 789
+            }
+        },
+        "fips-settings": null,
         "dieharder-settings": {
             "defaults": {
                 "test-ids": ["0-4","8-13","15-16","100-102","200-204"],
