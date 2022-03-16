@@ -5,12 +5,13 @@ from settings.general import BinariesSettings, ExecutionSettings, FileStorageSet
 
 
 class TestU01Execution:
-    def __init__(self, testu01_settings: TestU01Settings, binaries_settings: BinariesSettings, execution_settings: ExecutionSettings, storage_settings: FileStorageSettings, logger_settings: LoggerSettings):
+    def __init__(self, testu01_settings: TestU01Settings, binaries_settings: BinariesSettings, execution_settings: ExecutionSettings, storage_settings: FileStorageSettings, logger_settings: LoggerSettings, timestamp: str):
         self.battery_settings = testu01_settings
         self.binaries_settings = binaries_settings
         self.execution_settings = execution_settings
         self.storage_settings = storage_settings
         self.logger_settings = logger_settings
+        self.timestamp = timestamp
 
     # example commands:
     #   testu01 -m small_crush -t 2 -i bsi_input.rnd
@@ -22,17 +23,18 @@ class TestU01Execution:
     def execute_for_sequence(self, sequence_path: str):
         for test in self.battery_settings.per_test_id_settings:
             for variant in test.variants:
-                cli_args: list[str] =["-m", self.battery_settings.subbattery, "-t", test.test_id, "-i", sequence_path]
+                cli_args: list[str] = [self.binaries_settings.testu01, "-m",
+                                       self.battery_settings.subbattery, "-t", str(test.test_id), "-i", sequence_path]
                 if variant.bit_nb is not None:
-                    cli_args.extend(["--bit_nb", variant.bit_nb])
+                    cli_args.extend(["--bit_nb", str(variant.bit_nb)])
                 if variant.bit_r is not None:
-                    cli_args.extend(["--bit_r", variant.bit_r])
+                    cli_args.extend(["--bit_r", str(variant.bit_r)])
                 if variant.bit_s is not None:
-                    cli_args.extend(["--bit_s", variant.bit_s])
+                    cli_args.extend(["--bit_s", str(variant.bit_s)])
                 if variant.bit_w is not None:
-                    cli_args.extend(["--bit_w", variant.bit_w])
-                test_execution = Popen(
-                    cli_args,
-                    executable=self.binaries_settings.testu01)
-                test_execution.wait(
+                    cli_args.extend(["--bit_w", str(variant.bit_w)])
+                test_execution = Popen(cli_args)
+                error_code = test_execution.wait(
                     timeout=self.execution_settings.test_timeout_seconds)
+                stdout = test_execution.stdout.read()
+                # TODO: decide what to do with stdout, parse results
