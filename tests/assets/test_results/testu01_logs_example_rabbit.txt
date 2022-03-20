@@ -1,0 +1,1420 @@
+[INFO]  Significance level is set to alpha = 1.000% (0.010)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          Starting Rabbit:   nb = 10000000
+          Version: TestU01 1.2.3
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+***********************************************************
+HOST = c52cc9cba6f5, Linux
+
+Generator providing data from binary file.
+
+
+smultin_MultinomialBitsOver test:
+-----------------------------------------------
+   N =  2,  n = 5000000,  r =  0,   s = 32,   L =   36,
+       Sparse =   TRUE
+
+       Number of bits = n = 5000000
+       Number of cells = 2^L =        68719476736
+       Expected number per cell =  1 /  13743.895
+       EColl = n^2 / (2k) =  181.8989404
+       Hashing =   TRUE
+
+       Collision test
+       CollisionOver:   density = n / k =  1 /   13743.90
+       Expected number of collisions = Mu =     181.89
+
+
+-----------------------------------------------
+Results of CollisionOver test:
+
+POISSON approximation                 :
+Expected number of collisions = N*Mu  :      363.78
+Observed number of collisions         :      334
+p-value of test                       :    0.94
+
+-----------------------------
+Total number of cells containing j balls
+
+  j =  0                              :     137428953806
+  j =  1                              :          9999332
+  j =  2                              :              334
+  j =  3                              :                0
+  j =  4                              :                0
+  j =  5                              :                0
+
+-----------------------------------------------
+CPU time used                    :  00:00:05.79
+
+Generator state:
+========= State of the binary file stream generator =========
+          Bytes needed for testing:     1250000
+          Bytes read from file:         10485760
+          Total number of file rewinds: 0
+
+
+
+
+
+
+========= Summary results of Rabbit =========
+
+ Version:          TestU01 1.2.3
+ Generator:        Generator providing data from binary file.
+ Number of bits:   10000000
+ Number of statistics:  1
+ Total CPU time:   00:00:05.82
+
+ All tests were passed
+
+
+
+[INFO]  Significance level is set to alpha = 1.000% (0.010)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          Starting Rabbit:   nb = 10000000
+          Version: TestU01 1.2.3
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+***********************************************************
+HOST = c52cc9cba6f5, Linux
+
+Generator providing data from binary file.
+
+
+snpair_ClosePairsBitMatch test:
+-----------------------------------------------
+   N =  1,  n = 156250,  r =  0,  t = 2
+
+
+-----------------------------------------------
+Max of all bit distances              :   17.00
+p-value of test                       :    0.16
+
+-----------------------------------------------
+CPU time used                    :  00:00:00.04
+
+Generator state:
+========= State of the binary file stream generator =========
+          Bytes needed for testing:     1250000
+          Bytes read from file:         10485760
+          Total number of file rewinds: 0
+
+
+
+
+
+
+========= Summary results of Rabbit =========
+
+ Version:          TestU01 1.2.3
+ Generator:        Generator providing data from binary file.
+ Number of bits:   10000000
+ Number of statistics:  1
+ Total CPU time:   00:00:00.04
+
+ All tests were passed
+
+
+
+[INFO]  Significance level is set to alpha = 1.000% (0.010)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          Starting Rabbit:   nb = 10000000
+          Version: TestU01 1.2.3
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+***********************************************************
+HOST = c52cc9cba6f5, Linux
+
+Generator providing data from binary file.
+
+
+snpair_ClosePairsBitMatch test:
+-----------------------------------------------
+   N =  1,  n = 78125,  r =  0,  t = 4
+
+
+-----------------------------------------------
+Max of all bit distances              :    8.00
+p-value of test                       :    0.04
+
+-----------------------------------------------
+CPU time used                    :  00:00:00.03
+
+Generator state:
+========= State of the binary file stream generator =========
+          Bytes needed for testing:     1250000
+          Bytes read from file:         10485760
+          Total number of file rewinds: 0
+
+
+
+
+
+
+========= Summary results of Rabbit =========
+
+ Version:          TestU01 1.2.3
+ Generator:        Generator providing data from binary file.
+ Number of bits:   10000000
+ Number of statistics:  1
+ Total CPU time:   00:00:00.04
+
+ All tests were passed
+
+
+
+[INFO]  Significance level is set to alpha = 1.000% (0.010)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          Starting Rabbit:   nb = 10000000
+          Version: TestU01 1.2.3
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+***********************************************************
+HOST = c52cc9cba6f5, Linux
+
+Generator providing data from binary file.
+
+
+svaria_AppearanceSpacings test:
+-----------------------------------------------
+   N =  1,   Q = 468750,   K = 468750,   r = 0,   s = 30,   L = 10
+
+   Sequences of n = (K + Q)L =      9375000 bits
+   Q = 468750 initialization blocks
+   K = 468750 blocks for the test
+   the blocks have L = 10 bits
+
+
+
+-----------------------------------------------
+Normal statistic                      :    0.58
+p-value of test                       :    0.28
+
+-----------------------------------------------
+CPU time used                    :  00:00:00.02
+
+Generator state:
+========= State of the binary file stream generator =========
+          Bytes needed for testing:     1250000
+          Bytes read from file:         10485760
+          Total number of file rewinds: 0
+
+
+
+
+
+
+========= Summary results of Rabbit =========
+
+ Version:          TestU01 1.2.3
+ Generator:        Generator providing data from binary file.
+ Number of bits:   10000000
+ Number of statistics:  1
+ Total CPU time:   00:00:00.02
+
+ All tests were passed
+
+
+
+[INFO]  Significance level is set to alpha = 1.000% (0.010)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          Starting Rabbit:   nb = 10000000
+          Version: TestU01 1.2.3
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+***********************************************************
+HOST = c52cc9cba6f5, Linux
+
+Generator providing data from binary file.
+
+
+scomp_LinearComp test:
+-----------------------------------------------
+   N =  1,  n = 16320,  r =  0,    s = 32
+
+
+
+-----------------------------------------------
+Number of degrees of freedom          :    7
+Chi2 statistic for size of jumps      :    9.24
+p-value of test                       :    0.24
+
+
+-----------------------------------------------
+Normal statistic for number of jumps  :    0.59
+p-value of test                       :    0.28
+
+
+
+-----------------------------------------------
+CPU time used                    :  00:00:00.28
+
+Generator state:
+========= State of the binary file stream generator =========
+          Bytes needed for testing:     2040
+          Bytes read from file:         10485760
+          Total number of file rewinds: 0
+
+
+
+
+
+
+========= Summary results of Rabbit =========
+
+ Version:          TestU01 1.2.3
+ Generator:        Generator providing data from binary file.
+ Number of bits:   10000000
+ Number of statistics:  2
+ Total CPU time:   00:00:00.28
+
+ All tests were passed
+
+
+
+[INFO]  Significance level is set to alpha = 1.000% (0.010)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          Starting Rabbit:   nb = 10000000
+          Version: TestU01 1.2.3
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+***********************************************************
+HOST = c52cc9cba6f5, Linux
+
+Generator providing data from binary file.
+
+
+scomp_LempelZiv test:
+-----------------------------------------------
+   N =  1,  n = 8388608,  r =  0,   s =   32,   k =   23
+
+
+-----------------------------------------------
+Normal statistic                      :    0.99
+p-value of test                       :    0.16
+
+-----------------------------------------------
+CPU time used                    :  00:00:00.18
+
+Generator state:
+========= State of the binary file stream generator =========
+          Bytes needed for testing:     1048576
+          Bytes read from file:         10485760
+          Total number of file rewinds: 0
+
+
+
+
+
+
+========= Summary results of Rabbit =========
+
+ Version:          TestU01 1.2.3
+ Generator:        Generator providing data from binary file.
+ Number of bits:   10000000
+ Number of statistics:  1
+ Total CPU time:   00:00:00.18
+
+ All tests were passed
+
+
+
+[INFO]  Significance level is set to alpha = 1.000% (0.010)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          Starting Rabbit:   nb = 10000000
+          Version: TestU01 1.2.3
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+***********************************************************
+HOST = c52cc9cba6f5, Linux
+
+Generator providing data from binary file.
+
+
+sspectral_Fourier1 test:
+-----------------------------------------------
+   N =  1,  n = 1048576,  r =  0,   s =   32,   k =   20
+
+
+-----------------------------------------------
+Normal statistic                      :   -0.38
+p-value of test                       :    0.65
+
+-----------------------------------------------
+CPU time used                    :  00:00:00.07
+
+Generator state:
+========= State of the binary file stream generator =========
+          Bytes needed for testing:     131072
+          Bytes read from file:         10485760
+          Total number of file rewinds: 0
+
+
+
+
+
+
+========= Summary results of Rabbit =========
+
+ Version:          TestU01 1.2.3
+ Generator:        Generator providing data from binary file.
+ Number of bits:   10000000
+ Number of statistics:  1
+ Total CPU time:   00:00:00.07
+
+ All tests were passed
+
+
+
+[INFO]  Significance level is set to alpha = 1.000% (0.010)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          Starting Rabbit:   nb = 10000000
+          Version: TestU01 1.2.3
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+***********************************************************
+HOST = c52cc9cba6f5, Linux
+
+Generator providing data from binary file.
+
+
+sspectral_Fourier3 test:
+-----------------------------------------------
+   N = 4807,  n = 2048,  r =  0,   s =   32,   k =   11
+
+
+-----------------------------------------------
+
+Kolmogorov-Smirnov+ statistic = D+    :   0.019
+p-value of test                       :    0.68
+
+Kolmogorov-Smirnov- statistic = D-    :   0.028
+p-value of test                       :    0.44
+
+Anderson-Darling statistic = A2       :    0.30
+p-value of test                       :    0.94
+
+-----------------------------------------------
+CPU time used                    :  00:00:00.12
+
+Generator state:
+========= State of the binary file stream generator =========
+          Bytes needed for testing:     1249820
+          Bytes read from file:         10485760
+          Total number of file rewinds: 0
+
+
+
+
+
+
+========= Summary results of Rabbit =========
+
+ Version:          TestU01 1.2.3
+ Generator:        Generator providing data from binary file.
+ Number of bits:   10000000
+ Number of statistics:  1
+ Total CPU time:   00:00:00.12
+
+ All tests were passed
+
+
+
+[INFO]  Significance level is set to alpha = 1.000% (0.010)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          Starting Rabbit:   nb = 10000000
+          Version: TestU01 1.2.3
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+***********************************************************
+HOST = c52cc9cba6f5, Linux
+
+Generator providing data from binary file.
+
+
+sstring_LongestHeadRun test:
+-----------------------------------------------
+   N =  1,  n = 60,  r =  0,   s = 32,   L = 166656
+
+
+-----------------------------------------------
+Number of degrees of freedom          :    3
+Chi-square statistic                  :    0.99
+p-value of test                       :    0.80
+
+-----------------------------------------------
+Global longest run of 1               :   25.00
+p-value of test                       :    0.14
+
+
+
+-----------------------------------------------
+CPU time used                    :  00:00:00.06
+
+Generator state:
+========= State of the binary file stream generator =========
+          Bytes needed for testing:     1249920
+          Bytes read from file:         10485760
+          Total number of file rewinds: 0
+
+
+
+
+
+
+========= Summary results of Rabbit =========
+
+ Version:          TestU01 1.2.3
+ Generator:        Generator providing data from binary file.
+ Number of bits:   10000000
+ Number of statistics:  1
+ Total CPU time:   00:00:00.06
+
+ All tests were passed
+
+
+
+[INFO]  Significance level is set to alpha = 1.000% (0.010)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          Starting Rabbit:   nb = 10000000
+          Version: TestU01 1.2.3
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+***********************************************************
+HOST = c52cc9cba6f5, Linux
+
+Generator providing data from binary file.
+
+
+sstring_PeriodsInStrings test:
+-----------------------------------------------
+   N =  1,  n = 312500,  r =  0,   s =   31
+
+
+-----------------------------------------------
+Number of degrees of freedom          :   81
+Chi-square statistic                  :   77.48
+p-value of test                       :    0.59
+
+-----------------------------------------------
+CPU time used                    :  00:00:00.01
+
+Generator state:
+========= State of the binary file stream generator =========
+          Bytes needed for testing:     1250000
+          Bytes read from file:         10485760
+          Total number of file rewinds: 0
+
+
+
+
+
+
+========= Summary results of Rabbit =========
+
+ Version:          TestU01 1.2.3
+ Generator:        Generator providing data from binary file.
+ Number of bits:   10000000
+ Number of statistics:  1
+ Total CPU time:   00:00:00.01
+
+ All tests were passed
+
+
+
+[INFO]  Significance level is set to alpha = 1.000% (0.010)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          Starting Rabbit:   nb = 10000000
+          Version: TestU01 1.2.3
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+***********************************************************
+HOST = c52cc9cba6f5, Linux
+
+Generator providing data from binary file.
+
+
+sstring_HammingWeight test:
+-----------------------------------------------
+   N =  1,  n = 312500,  r =  0,   s = 32,   L = 32
+
+
+-----------------------------------------------
+Number of degrees of freedom          :   22
+Chi-square statistic                  :   25.75
+p-value of test                       :    0.26
+
+-----------------------------------------------
+CPU time used                    :  00:00:00.00
+
+Generator state:
+========= State of the binary file stream generator =========
+          Bytes needed for testing:     1250000
+          Bytes read from file:         10485760
+          Total number of file rewinds: 0
+
+
+
+
+
+
+========= Summary results of Rabbit =========
+
+ Version:          TestU01 1.2.3
+ Generator:        Generator providing data from binary file.
+ Number of bits:   10000000
+ Number of statistics:  1
+ Total CPU time:   00:00:00.00
+
+ All tests were passed
+
+
+
+[INFO]  Significance level is set to alpha = 1.000% (0.010)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          Starting Rabbit:   nb = 10000000
+          Version: TestU01 1.2.3
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+***********************************************************
+HOST = c52cc9cba6f5, Linux
+
+Generator providing data from binary file.
+
+
+sstring_HammingCorr test:
+-----------------------------------------------
+   N =  1,  n = 312500,  r =  0,   s = 32,   L = 32
+
+
+
+-----------------------------------------------
+Normal statistic                      :    0.71
+p-value of test                       :    0.24
+
+-----------------------------------------------
+CPU time used                    :  00:00:00.01
+
+Generator state:
+========= State of the binary file stream generator =========
+          Bytes needed for testing:     1250000
+          Bytes read from file:         10485760
+          Total number of file rewinds: 0
+
+
+
+
+
+
+========= Summary results of Rabbit =========
+
+ Version:          TestU01 1.2.3
+ Generator:        Generator providing data from binary file.
+ Number of bits:   10000000
+ Number of statistics:  1
+ Total CPU time:   00:00:00.01
+
+ All tests were passed
+
+
+
+[INFO]  Significance level is set to alpha = 1.000% (0.010)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          Starting Rabbit:   nb = 10000000
+          Version: TestU01 1.2.3
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+***********************************************************
+HOST = c52cc9cba6f5, Linux
+
+Generator providing data from binary file.
+
+
+sstring_HammingCorr test:
+-----------------------------------------------
+   N =  1,  n = 156250,  r =  0,   s = 32,   L = 64
+
+
+
+-----------------------------------------------
+Normal statistic                      :    0.30
+p-value of test                       :    0.38
+
+-----------------------------------------------
+CPU time used                    :  00:00:00.01
+
+Generator state:
+========= State of the binary file stream generator =========
+          Bytes needed for testing:     1250000
+          Bytes read from file:         10485760
+          Total number of file rewinds: 0
+
+
+
+
+
+
+========= Summary results of Rabbit =========
+
+ Version:          TestU01 1.2.3
+ Generator:        Generator providing data from binary file.
+ Number of bits:   10000000
+ Number of statistics:  1
+ Total CPU time:   00:00:00.01
+
+ All tests were passed
+
+
+
+[INFO]  Significance level is set to alpha = 1.000% (0.010)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          Starting Rabbit:   nb = 10000000
+          Version: TestU01 1.2.3
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+***********************************************************
+HOST = c52cc9cba6f5, Linux
+
+Generator providing data from binary file.
+
+
+sstring_HammingCorr test:
+-----------------------------------------------
+   N =  1,  n = 78125,  r =  0,   s = 32,   L = 128
+
+
+
+-----------------------------------------------
+Normal statistic                      :    2.05
+p-value of test                       :    0.02
+
+-----------------------------------------------
+CPU time used                    :  00:00:00.01
+
+Generator state:
+========= State of the binary file stream generator =========
+          Bytes needed for testing:     1250000
+          Bytes read from file:         10485760
+          Total number of file rewinds: 0
+
+
+
+
+
+
+========= Summary results of Rabbit =========
+
+ Version:          TestU01 1.2.3
+ Generator:        Generator providing data from binary file.
+ Number of bits:   10000000
+ Number of statistics:  1
+ Total CPU time:   00:00:00.01
+
+ All tests were passed
+
+
+
+[INFO]  Significance level is set to alpha = 1.000% (0.010)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          Starting Rabbit:   nb = 10000000
+          Version: TestU01 1.2.3
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+***********************************************************
+HOST = c52cc9cba6f5, Linux
+
+Generator providing data from binary file.
+
+
+sstring_HammingIndep test:
+-----------------------------------------------
+   N =  1,  n = 312500,  r =  0,   s = 32,   L = 16,   d = 0
+
+
+
+Counters with expected numbers >= 10
+-----------------------------------------------
+Number of degrees of freedom          :  169
+Chi-square statistic                  :  175.02
+p-value of test                       :    0.36
+
+-----------------------------------------------
+CPU time used                    :  00:00:00.01
+
+Generator state:
+========= State of the binary file stream generator =========
+          Bytes needed for testing:     1250000
+          Bytes read from file:         10485760
+          Total number of file rewinds: 0
+
+
+
+
+
+
+========= Summary results of Rabbit =========
+
+ Version:          TestU01 1.2.3
+ Generator:        Generator providing data from binary file.
+ Number of bits:   10000000
+ Number of statistics:  1
+ Total CPU time:   00:00:00.01
+
+ All tests were passed
+
+
+
+[INFO]  Significance level is set to alpha = 1.000% (0.010)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          Starting Rabbit:   nb = 10000000
+          Version: TestU01 1.2.3
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+***********************************************************
+HOST = c52cc9cba6f5, Linux
+
+Generator providing data from binary file.
+
+
+sstring_HammingIndep test:
+-----------------------------------------------
+   N =  1,  n = 156250,  r =  0,   s = 32,   L = 32,   d = 0
+
+
+
+Counters with expected numbers >= 10
+-----------------------------------------------
+Number of degrees of freedom          :  285
+Chi-square statistic                  :  315.01
+p-value of test                       :    0.11
+
+-----------------------------------------------
+CPU time used                    :  00:00:00.01
+
+Generator state:
+========= State of the binary file stream generator =========
+          Bytes needed for testing:     1250000
+          Bytes read from file:         10485760
+          Total number of file rewinds: 0
+
+
+
+
+
+
+========= Summary results of Rabbit =========
+
+ Version:          TestU01 1.2.3
+ Generator:        Generator providing data from binary file.
+ Number of bits:   10000000
+ Number of statistics:  1
+ Total CPU time:   00:00:00.01
+
+ All tests were passed
+
+
+
+[INFO]  Significance level is set to alpha = 1.000% (0.010)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          Starting Rabbit:   nb = 10000000
+          Version: TestU01 1.2.3
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+***********************************************************
+HOST = c52cc9cba6f5, Linux
+
+Generator providing data from binary file.
+
+
+sstring_HammingIndep test:
+-----------------------------------------------
+   N =  1,  n = 78125,  r =  0,   s = 32,   L = 64,   d = 0
+
+
+
+Counters with expected numbers >= 10
+-----------------------------------------------
+Number of degrees of freedom          :  437
+Chi-square statistic                  :  438.74
+p-value of test                       :    0.47
+
+-----------------------------------------------
+CPU time used                    :  00:00:00.01
+
+Generator state:
+========= State of the binary file stream generator =========
+          Bytes needed for testing:     1250000
+          Bytes read from file:         10485760
+          Total number of file rewinds: 0
+
+
+
+
+
+
+========= Summary results of Rabbit =========
+
+ Version:          TestU01 1.2.3
+ Generator:        Generator providing data from binary file.
+ Number of bits:   10000000
+ Number of statistics:  1
+ Total CPU time:   00:00:00.01
+
+ All tests were passed
+
+
+
+[INFO]  Significance level is set to alpha = 1.000% (0.010)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          Starting Rabbit:   nb = 10000000
+          Version: TestU01 1.2.3
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+***********************************************************
+HOST = c52cc9cba6f5, Linux
+
+Generator providing data from binary file.
+
+
+sstring_AutoCor test:
+-----------------------------------------------
+   N =  1,  n = 9999937,  r =  0,   s = 32,   d = 1
+
+
+-----------------------------------------------
+Normal statistic                      :  -0.056
+p-value of test                       :    0.52
+
+-----------------------------------------------
+CPU time used                    :  00:00:00.02
+
+Generator state:
+========= State of the binary file stream generator =========
+          Bytes needed for testing:     1249996
+          Bytes read from file:         10485760
+          Total number of file rewinds: 0
+
+
+
+
+
+
+========= Summary results of Rabbit =========
+
+ Version:          TestU01 1.2.3
+ Generator:        Generator providing data from binary file.
+ Number of bits:   10000000
+ Number of statistics:  1
+ Total CPU time:   00:00:00.02
+
+ All tests were passed
+
+
+
+[INFO]  Significance level is set to alpha = 1.000% (0.010)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          Starting Rabbit:   nb = 10000000
+          Version: TestU01 1.2.3
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+***********************************************************
+HOST = c52cc9cba6f5, Linux
+
+Generator providing data from binary file.
+
+
+sstring_AutoCor test:
+-----------------------------------------------
+   N =  1,  n = 9999938,  r =  0,   s = 32,   d = 2
+
+
+-----------------------------------------------
+Normal statistic                      :  -0.054
+p-value of test                       :    0.52
+
+-----------------------------------------------
+CPU time used                    :  00:00:00.02
+
+Generator state:
+========= State of the binary file stream generator =========
+          Bytes needed for testing:     1249996
+          Bytes read from file:         10485760
+          Total number of file rewinds: 0
+
+
+
+
+
+
+========= Summary results of Rabbit =========
+
+ Version:          TestU01 1.2.3
+ Generator:        Generator providing data from binary file.
+ Number of bits:   10000000
+ Number of statistics:  1
+ Total CPU time:   00:00:00.02
+
+ All tests were passed
+
+
+
+[INFO]  Significance level is set to alpha = 1.000% (0.010)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          Starting Rabbit:   nb = 10000000
+          Version: TestU01 1.2.3
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+***********************************************************
+HOST = c52cc9cba6f5, Linux
+
+Generator providing data from binary file.
+
+
+sstring_Run test:
+-----------------------------------------------
+   N =  1,  n = 2000000,  r =  0,   s =   32
+
+
+-----------------------------------------------
+Total number of 1 runs:  2000002
+
+Number of degrees of freedom          :   34
+Chi2 statistic for number of runs     :   34.95
+p-value of test                       :    0.42
+
+
+-----------------------------------------------
+Total number of bits:  8000576
+
+Normal statistic for number of bits   :    0.14
+p-value of test                       :    0.44
+
+
+
+-----------------------------------------------
+CPU time used                    :  00:00:00.05
+
+Generator state:
+========= State of the binary file stream generator =========
+          Bytes needed for testing:     1000072
+          Bytes read from file:         10485760
+          Total number of file rewinds: 0
+
+
+
+
+
+
+========= Summary results of Rabbit =========
+
+ Version:          TestU01 1.2.3
+ Generator:        Generator providing data from binary file.
+ Number of bits:   10000000
+ Number of statistics:  2
+ Total CPU time:   00:00:00.05
+
+ All tests were passed
+
+
+
+[INFO]  Significance level is set to alpha = 1.000% (0.010)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          Starting Rabbit:   nb = 10000000
+          Version: TestU01 1.2.3
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+***********************************************************
+HOST = c52cc9cba6f5, Linux
+
+Generator providing data from binary file.
+
+
+smarsa_MatrixRank test:
+-----------------------------------------------
+   N =  1,  n = 9765,  r =  0,    s = 32,    L = 32,    k = 32
+
+
+-----------------------------------------------
+Number of degrees of freedom          :    3
+Chi-square statistic                  :    3.16
+p-value of test                       :    0.37
+
+-----------------------------------------------
+CPU time used                    :  00:00:00.06
+
+Generator state:
+========= State of the binary file stream generator =========
+          Bytes needed for testing:     1249920
+          Bytes read from file:         10485760
+          Total number of file rewinds: 0
+
+
+
+
+
+
+========= Summary results of Rabbit =========
+
+ Version:          TestU01 1.2.3
+ Generator:        Generator providing data from binary file.
+ Number of bits:   10000000
+ Number of statistics:  1
+ Total CPU time:   00:00:00.06
+
+ All tests were passed
+
+
+
+[INFO]  Significance level is set to alpha = 1.000% (0.010)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          Starting Rabbit:   nb = 10000000
+          Version: TestU01 1.2.3
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+***********************************************************
+HOST = c52cc9cba6f5, Linux
+
+Generator providing data from binary file.
+
+
+smarsa_MatrixRank test:
+-----------------------------------------------
+   N =  1,  n = 97,  r =  0,    s = 32,    L = 320,    k = 320
+
+
+-----------------------------------------------
+Number of degrees of freedom          :    2
+Chi-square statistic                  :    2.96
+p-value of test                       :    0.23
+
+-----------------------------------------------
+CPU time used                    :  00:00:00.09
+
+Generator state:
+========= State of the binary file stream generator =========
+          Bytes needed for testing:     1241600
+          Bytes read from file:         10485760
+          Total number of file rewinds: 0
+
+
+
+
+
+
+========= Summary results of Rabbit =========
+
+ Version:          TestU01 1.2.3
+ Generator:        Generator providing data from binary file.
+ Number of bits:   10000000
+ Number of statistics:  1
+ Total CPU time:   00:00:00.09
+
+ All tests were passed
+
+
+
+[INFO]  Significance level is set to alpha = 1.000% (0.010)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          Starting Rabbit:   nb = 10000000
+          Version: TestU01 1.2.3
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+
+========= Summary results of Rabbit =========
+
+ Version:          TestU01 1.2.3
+ Generator:        Generator providing data from binary file.
+ Number of bits:   10000000
+ Number of statistics:  0
+ Total CPU time:   00:00:00.00
+
+ All tests were passed
+
+
+
+[INFO]  Significance level is set to alpha = 1.000% (0.010)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          Starting Rabbit:   nb = 10000000
+          Version: TestU01 1.2.3
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+***********************************************************
+HOST = c52cc9cba6f5, Linux
+
+Generator providing data from binary file.
+
+
+swalk_RandomWalk1 test:
+-----------------------------------------------
+   N =  1,  n = 78125,  r =  0,   s = 32,   L0 =  128,   L1 =  128
+
+
+
+-----------------------------------------------
+Test on the values of the Statistic H
+
+Number of degrees of freedom          :   42
+ChiSquare statistic                   :   40.64
+p-value of test                       :    0.53
+
+
+-----------------------------------------------
+Test on the values of the Statistic M
+
+Number of degrees of freedom          :   41
+ChiSquare statistic                   :   47.61
+p-value of test                       :    0.22
+
+
+-----------------------------------------------
+Test on the values of the Statistic J
+
+Number of degrees of freedom          :   64
+ChiSquare statistic                   :   61.79
+p-value of test                       :    0.56
+
+
+-----------------------------------------------
+Test on the values of the Statistic R
+
+Number of degrees of freedom          :   35
+ChiSquare statistic                   :   46.97
+p-value of test                       :    0.09
+
+
+-----------------------------------------------
+Test on the values of the Statistic C
+
+Number of degrees of freedom          :   21
+ChiSquare statistic                   :   22.88
+p-value of test                       :    0.35
+
+
+-----------------------------------------------
+CPU time used                    :  00:00:00.09
+
+Generator state:
+========= State of the binary file stream generator =========
+          Bytes needed for testing:     1250000
+          Bytes read from file:         10485760
+          Total number of file rewinds: 0
+
+
+
+
+
+
+========= Summary results of Rabbit =========
+
+ Version:          TestU01 1.2.3
+ Generator:        Generator providing data from binary file.
+ Number of bits:   10000000
+ Number of statistics:  5
+ Total CPU time:   00:00:00.09
+
+ All tests were passed
+
+
+
+[INFO]  Significance level is set to alpha = 1.000% (0.010)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          Starting Rabbit:   nb = 10000000
+          Version: TestU01 1.2.3
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+***********************************************************
+HOST = c52cc9cba6f5, Linux
+
+Generator providing data from binary file.
+
+
+swalk_RandomWalk1 test:
+-----------------------------------------------
+   N =  1,  n = 9765,  r =  0,   s = 32,   L0 = 1024,   L1 = 1024
+
+
+
+-----------------------------------------------
+Test on the values of the Statistic H
+
+Number of degrees of freedom          :   88
+ChiSquare statistic                   :   99.22
+p-value of test                       :    0.19
+
+
+-----------------------------------------------
+Test on the values of the Statistic M
+
+Number of degrees of freedom          :   88
+ChiSquare statistic                   :  114.55
+p-value of test                       :    0.03
+
+
+-----------------------------------------------
+Test on the values of the Statistic J
+
+Number of degrees of freedom          :  512
+ChiSquare statistic                   :  537.27
+p-value of test                       :    0.21
+
+
+-----------------------------------------------
+Test on the values of the Statistic R
+
+Number of degrees of freedom          :   85
+ChiSquare statistic                   :   82.18
+p-value of test                       :    0.57
+
+
+-----------------------------------------------
+Test on the values of the Statistic C
+
+Number of degrees of freedom          :   48
+ChiSquare statistic                   :   26.27
+p-value of test                       :    0.9955    *****
+
+
+-----------------------------------------------
+CPU time used                    :  00:00:00.09
+
+Generator state:
+========= State of the binary file stream generator =========
+          Bytes needed for testing:     1249920
+          Bytes read from file:         10485760
+          Total number of file rewinds: 0
+
+
+
+
+
+
+========= Summary results of Rabbit =========
+
+ Version:          TestU01 1.2.3
+ Generator:        Generator providing data from binary file.
+ Number of bits:   10000000
+ Number of statistics:  5
+ Total CPU time:   00:00:00.09
+ The following tests gave p-values outside [0.01, 0.99]:
+ (eps  means a value < 1.0e-300):
+ (eps1 means a value < 1.0e-15):
+
+       Test                          p-value
+ ----------------------------------------------
+ 25  RandomWalk1 C (L = 1024)        0.9955 
+ ----------------------------------------------
+ All other tests were passed
+
+
+
+[INFO]  Significance level is set to alpha = 1.000% (0.010)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          Starting Rabbit:   nb = 10000000
+          Version: TestU01 1.2.3
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+***********************************************************
+HOST = c52cc9cba6f5, Linux
+
+Generator providing data from binary file.
+
+
+swalk_RandomWalk1 test:
+-----------------------------------------------
+   N =  1,  n = 998,  r =  0,   s = 32,   L0 = 10016,   L1 = 10016
+
+
+
+-----------------------------------------------
+Test on the values of the Statistic H
+
+Number of degrees of freedom          :   75
+ChiSquare statistic                   :   69.01
+p-value of test                       :    0.67
+
+
+-----------------------------------------------
+Test on the values of the Statistic M
+
+Number of degrees of freedom          :   76
+ChiSquare statistic                   :   71.12
+p-value of test                       :    0.64
+
+
+-----------------------------------------------
+Test on the values of the Statistic J
+
+Number of degrees of freedom          :   96
+ChiSquare statistic                   :   87.97
+p-value of test                       :    0.71
+
+
+-----------------------------------------------
+Test on the values of the Statistic R
+
+Number of degrees of freedom          :   76
+ChiSquare statistic                   :   87.15
+p-value of test                       :    0.18
+
+
+-----------------------------------------------
+Test on the values of the Statistic C
+
+Number of degrees of freedom          :   72
+ChiSquare statistic                   :   77.99
+p-value of test                       :    0.29
+
+
+-----------------------------------------------
+CPU time used                    :  00:00:00.09
+
+Generator state:
+========= State of the binary file stream generator =========
+          Bytes needed for testing:     1249496
+          Bytes read from file:         10485760
+          Total number of file rewinds: 0
+
+
+
+
+
+
+========= Summary results of Rabbit =========
+
+ Version:          TestU01 1.2.3
+ Generator:        Generator providing data from binary file.
+ Number of bits:   10000000
+ Number of statistics:  5
+ Total CPU time:   00:00:00.09
+
+ All tests were passed
+
+
+
