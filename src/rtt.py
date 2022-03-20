@@ -58,12 +58,16 @@ def main():
     bat_json = json.loads(open(
         "/ws/rtt-py/tests/assets/configs/10MB.json").read())["randomness-testing-toolkit"]
     bsi_settings = BsiSettings(bat_json["bsi-settings"])
-    dieharder_settings = DieharderSettingsFactory.make_settings(
-        bat_json["dieharder-settings"])
-    testu01_settings = TestU01SettingsFactory.make_settings(
-        bat_json["tu01-rabbit-settings"], "rabbit")
     nist_settings = NistSettingsFactory.make_settings(
         bat_json["nist-sts-settings"])
+    dieharder_settings = DieharderSettingsFactory.make_settings(
+        bat_json["dieharder-settings"])
+    tu01_rabbit_settings = TestU01SettingsFactory.make_settings(
+        bat_json["tu01-rabbit-settings"], "rabbit")
+    tu01_alphabit_settings = TestU01SettingsFactory.make_settings(
+        bat_json["tu01-alphabit-settings"], "alphabit")
+    tu01_block_alphabit_settings = TestU01SettingsFactory.make_settings(
+        bat_json["tu01-blockalphabit-settings"], "block_alphabit")
 
     # execution
     bsi_execution = BsiExecution(bsi_settings, binaries_settings, execution_settings,
@@ -74,14 +78,26 @@ def main():
                                    file_storage_settings, logger_settings, EXECUTION_TIMESTAMP)
     dieharder_execution = DieharderExecution(
         dieharder_settings, binaries_settings, execution_settings, file_storage_settings, logger_settings, EXECUTION_TIMESTAMP)
-    testu01_execution = TestU01Execution(
-        testu01_settings, binaries_settings, execution_settings, file_storage_settings, logger_settings, EXECUTION_TIMESTAMP)
-
-    bsi_execution.execute_for_sequence(f)
-    fips_execution.execute_for_sequence(f)
+    tu01_rabbit_execution = TestU01Execution(
+        tu01_rabbit_settings, binaries_settings, execution_settings, file_storage_settings, logger_settings, EXECUTION_TIMESTAMP)
+    tu01_alphabit_execution = TestU01Execution(
+        tu01_alphabit_settings, binaries_settings, execution_settings, file_storage_settings, logger_settings, EXECUTION_TIMESTAMP)
+    tu01_block_alphabit_execution = TestU01Execution(
+        tu01_block_alphabit_settings, binaries_settings, execution_settings, file_storage_settings, logger_settings, EXECUTION_TIMESTAMP)
+    bsi_result = bsi_execution.execute_for_sequence(f)
+    print(bsi_result)
+    fips_result = fips_execution.execute_for_sequence(f)
+    print(fips_result)
     nist_execution.execute_for_sequence(f)
-    dieharder_execution.execute_for_sequence(f)
-    testu01_execution.execute_for_sequence(f)
+    dh_result = dieharder_execution.execute_for_sequence(f)
+    print(dh_result)
+    rabbit_result = tu01_rabbit_execution.execute_for_sequence(f)
+    print(rabbit_result)
+    alphabit_result = tu01_alphabit_execution.execute_for_sequence(f)
+    print(alphabit_result)
+    block_alphabit_result = tu01_block_alphabit_execution.execute_for_sequence(
+        f)
+    print(block_alphabit_result)
 
 
 if __name__ == "__main__":
