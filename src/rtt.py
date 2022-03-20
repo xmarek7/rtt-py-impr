@@ -69,7 +69,7 @@ def main():
     tu01_block_alphabit_settings = TestU01SettingsFactory.make_settings(
         bat_json["tu01-blockalphabit-settings"], "block_alphabit")
 
-    # execution
+    # execution initialization
     bsi_execution = BsiExecution(bsi_settings, binaries_settings, execution_settings,
                                  file_storage_settings, logger_settings, EXECUTION_TIMESTAMP)
     fips_execution = FipsExecution(binaries_settings, execution_settings,
@@ -84,11 +84,14 @@ def main():
         tu01_alphabit_settings, binaries_settings, execution_settings, file_storage_settings, logger_settings, EXECUTION_TIMESTAMP)
     tu01_block_alphabit_execution = TestU01Execution(
         tu01_block_alphabit_settings, binaries_settings, execution_settings, file_storage_settings, logger_settings, EXECUTION_TIMESTAMP)
+
+    # execute for sequence
     bsi_result = bsi_execution.execute_for_sequence(f)
     print(bsi_result)
     fips_result = fips_execution.execute_for_sequence(f)
     print(fips_result)
-    nist_execution.execute_for_sequence(f)
+    nist_result = nist_execution.execute_for_sequence(f)
+    print(nist_result)
     dh_result = dieharder_execution.execute_for_sequence(f)
     print(dh_result)
     rabbit_result = tu01_rabbit_execution.execute_for_sequence(f)
