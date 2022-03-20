@@ -1,4 +1,4 @@
-class DieharderExecutionResult:
+class DieharderResult:
     def __init__(self, test_id: int, test_name: str,
                  ntuples: int, tsamples: int, psamples: int,
                  pvalue: float):

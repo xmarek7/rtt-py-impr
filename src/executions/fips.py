@@ -1,11 +1,17 @@
+import json
 import logging
 import os
 from subprocess import Popen, PIPE
 from settings.general import ExecutionSettings, BinariesSettings, FileStorageSettings, LoggerSettings
+from results.fips import FipsResult
 
 
 class FipsExecution:
-    def __init__(self, binaries_settings: BinariesSettings, execution_settings: ExecutionSettings, storage_settings: FileStorageSettings, logger_settings: LoggerSettings, timestamp: str):
+    def __init__(self, binaries_settings: BinariesSettings,
+                 execution_settings: ExecutionSettings,
+                 storage_settings: FileStorageSettings,
+                 logger_settings: LoggerSettings,
+                 timestamp: str):
         self.binaries_settings = binaries_settings
         self.execution_settings = execution_settings
         self.storage_settings = storage_settings
@@ -13,29 +19,43 @@ class FipsExecution:
         self.timestamp = timestamp
         self.app_logger = logging.getLogger()
 
-    def execute_for_sequence(self, sequence_path):
+    def execute_for_sequence(self, sequence_path) -> 'list[FipsResult]':
         self.prepare_output_dirs()
-        output_filename = self.timestamp + "_" + os.path.splitext(os.path.basename(sequence_path))[0] + ".json"
-        out_file = os.path.join(self.storage_settings.fips_dir, output_filename)
-        self.app_logger.info(f"FIPS results will be saved to {out_file}")
-        test_execution = Popen(
-            [self.binaries_settings.fips, "--input_file",
-             sequence_path, "--output_file", out_file], stdout=PIPE, stderr=PIPE)
+        execution_result: list[FipsResult] = []
+        output_filename = self.timestamp + "_" + \
+            os.path.splitext(
+                os.path.basename(sequence_path))[0] + ".json"
+        out_file = os.path.join(
+            self.storage_settings.fips_dir, output_filename)
+        self.app_logger.info(
+            f"FIPS results will be saved to {out_file}")
+        test_execution = Popen([
+            self.binaries_settings.fips,
+            "--input_file",
+            sequence_path,
+            "--output_file",
+            out_file],
+            stdout=PIPE,
+            stderr=PIPE)
         exit_code = test_execution.wait(
             timeout=self.execution_settings.test_timeout_seconds)
-        stdout = test_execution.stdout.read()
-        stderr = test_execution.stderr.read()
+        stdout = test_execution.stdout.read().decode("utf-8")
         if exit_code != 0:
-            self.app_logger.error(f"FIPS execution for file {sequence_path} failed. STDOUT:\n{stdout}\nSTDERR:\n{stderr}")
+            stderr = test_execution.stderr.read().decode("utf-8")
+            self.app_logger.error(
+                f"FIPS execution for file {sequence_path} failed. "
+                f"STDOUT:\n{stdout}\nSTDERR:\n{stderr}")
         else:
-            if len(stdout) > 0:
-                self.app_logger.info(f"FIPS execution STDOUT:\n{stdout}")
-            if len(stderr) > 0:
-                self.app_logger.warning(
-                    f"FIPS execution ended with non-empty STDERR:\n{stderr}")
-        # TODO: error handling & logging
-        # TODO: test results handling
-        
+            output_as_json = json.loads(stdout)
+            execution_accepted: bool = output_as_json["accepted"]
+            for t in output_as_json["tests"]:
+                test_name = t["name"]
+                num_failures = t["num_failures"]
+                num_runs = t["num_runs"]
+                execution_result.append(FipsResult(
+                    execution_accepted, test_name, num_failures, num_runs))
+        return execution_result
+
     def prepare_output_dirs(self):
         log_dir = self.logger_settings.fips_dir
         if not os.path.isdir(log_dir):
