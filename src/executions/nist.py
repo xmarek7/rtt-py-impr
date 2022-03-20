@@ -8,7 +8,12 @@ from settings.general import BinariesSettings, ExecutionSettings, FileStorageSet
 
 
 class NistExecution:
-    def __init__(self, nist_settings: NistSettings, binaries_settings: BinariesSettings, execution_settings: ExecutionSettings, storage_settings: FileStorageSettings, logger_settings: LoggerSettings, timestamp: str):
+    def __init__(self, nist_settings: NistSettings,
+                 binaries_settings: BinariesSettings,
+                 execution_settings: ExecutionSettings,
+                 storage_settings: FileStorageSettings,
+                 logger_settings: LoggerSettings,
+                 timestamp: str):
         self.battery_settings = nist_settings
         self.binaries_settings = binaries_settings
         self.execution_settings = execution_settings
@@ -18,6 +23,8 @@ class NistExecution:
             self.battery_settings.test_ids)
         self.app_logger = logging.getLogger()
         self.timestamp = timestamp
+        self.nist_templates_dir = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "nist_templates")
 
     # nonoverlappingtest check templates
     # assess 1000000 -fast --file test_sequences/10MB.rnd --tests 1111111111111111 --streams 80 --defaultpar --binary
@@ -25,25 +32,26 @@ class NistExecution:
         self.prepare_output_dirs()
         test_execution = Popen([
             self.binaries_settings.nist_sts,
-            str(self.battery_settings.stream_size), "-fast", "-defaultpar",
-            "--file", sequence_path, "-binary", "-tests", self.test_ids_param,
-            "--streams", str(self.battery_settings.stream_count)],
+            str(self.battery_settings.stream_size),
+            "-fast",
+            "-defaultpar",
+            "--file", sequence_path, "-binary",
+            "-tests", self.test_ids_param,
+            "--streams", str(self.battery_settings.stream_count),
+            "-templatesdir", self.nist_templates_dir],
             stdout=PIPE,
             stderr=PIPE,
             cwd=self.storage_settings.nist_sts_dir)
         error_code = test_execution.wait(
             timeout=self.execution_settings.test_timeout_seconds)
         stdout = test_execution.stdout.read()
-        stderr = test_execution.stderr.read()
-        if error_code != 0:
+        if error_code != 1:  # assess returns 1 on success
             self.app_logger.error(
-                f"NIST-STS execution for file {sequence_path} failed. STDOUT:\n{stdout}\nSTDERR:\n{stderr}")
+                f"NIST-STS execution for file {sequence_path} failed."
+                f" STDOUT:\n{str(stdout)}\n")
         else:
             if len(stdout) > 0:
                 self.app_logger.info(f"NIST-STS execution STDOUT:\n{stdout}")
-            if len(stderr) > 0:
-                self.app_logger.warning(
-                    f"NIST-STS execution ended with non-empty STDERR:\n{stderr}")
 
     def prepare_output_dirs(self):
         log_dir = self.logger_settings.nist_sts_dir
@@ -75,7 +83,8 @@ class NistExecution:
         ]
         for test_result_dir in test_result_dirs:
             dir_path = os.path.join(
-                self.storage_settings.nist_sts_dir, "experiments", "AlgorithmTesting", test_result_dir)
+                self.storage_settings.nist_sts_dir,
+                "experiments", "AlgorithmTesting", test_result_dir)
             self.app_logger.info(
                 f"NIST-STS creating result directory {dir_path}")
             os.makedirs(dir_path, exist_ok=True)
