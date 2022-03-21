@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NIST results for {{ tested_file }}</title>
+    <link rel="stylesheet" href="jinja_templates/css/styles.css">
+    <link rel="stylesheet" href="jinja_templates/css/nist_styles.css">
+</head>
+<body class="nist">
+    <h3>Input file: {{ tested_file }}</h3>
+    {% for res in list_of_results:%}
+    <div class="nist">
+        <h4 class="nist">Test: {{ res.test_name }}</h4>
+        <table class="nist">
+            <tr class="nist">
+                <th class="nist">p-value</th>
+                <td class="nist">{{ res.p_value }}</td>
+            </tr>
+            <tr class="nist">
+                <th class="nist">proportion</th>
+                <td class="nist">{{ res.proportion }}</td>
+            </tr>
+        </table>
+    </div>
+    {% endfor %}
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FIPS results for {{ tested_file }}</title>
+    <link rel="stylesheet" href="jinja_templates/css/styles.css">
+    <link rel="stylesheet" href="jinja_templates/css/fips_styles.css">
+</head>
+<body class="fips">
+    <h3>Input file: {{ tested_file }}</h3>
+    {% if battery_accepted == False %}
+        <h4 style="color:red;">FIPS battery was REJECTED</h4>
+    {% else %}
+        <h4 style="color:green;">FIPS battery was ACCEPTED</h4>
+    {% endif %}
+    {% for res in list_of_results:%}
+    <div class="fips">
+        <h4 class="fips">Test: {{ res.test_name }}</h4>
+        <table class="fips">
+            <tr class="fips">
+                <th class="fips">Failed runs</th>
+                <td class="fips">{{ res.num_failures }}</td>
+            </tr>
+            <tr class="fips">
+                <th class="fips">Runs</th>
+                <td class="fips">{{ res.num_runs }}</td>
+            </tr>
+        </table>
+    </div>
+    {% endfor %}
+</body>
+</html>

@@ -1,0 +1,15 @@
+div.dieharder:nth-child(odd) {
+  background-color: lightgray;
+}
+
+div.dieharder:nth-child(even) {
+  background-color: silver;
+}
+
+th.dieharder {
+  text-align: left;
+}
+
+td.dieharder {
+  text-align: right;
+}

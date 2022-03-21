@@ -1,0 +1,15 @@
+div.nist:nth-child(odd) {
+  background-color: lightgray;
+}
+
+div.nist:nth-child(even) {
+  background-color: silver;
+}
+
+th.nist {
+  text-align: left;
+}
+
+td.nist {
+  text-align: right;
+}

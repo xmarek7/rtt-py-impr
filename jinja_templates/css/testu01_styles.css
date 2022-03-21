@@ -1,0 +1,7 @@
+div.testu01:nth-child(odd) {
+  background-color: lightgray;
+}
+
+div.testu01:nth-child(even) {
+  background-color: silver;
+}

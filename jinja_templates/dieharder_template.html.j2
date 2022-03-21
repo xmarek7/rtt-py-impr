@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DieHarder results for {{ tested_file }}</title>
+    <link rel="stylesheet" href="jinja_templates/css/styles.css">
+    <link rel="stylesheet" href="jinja_templates/css/dieharder_styles.css">
+</head>
+<body class="dieharder">
+    <h3>Input file: {{ tested_file }}</h3>
+    {% for res in list_of_results:%}
+    <div class="dieharder">
+        <h4 class="dieharder">Test {{ res.test_id }}: {{ res.test_name }}</h4>
+        <table class="dieharder">
+            <tr class="dieharder">
+                <th class="dieharder">ntuples</th>
+                <td class="dieharder">{{ res.ntuples }}</td>
+            </tr>
+            <tr class="dieharder">
+                <th class="dieharder">tsamples</th>
+                <td class="dieharder">{{ res.tsamples }}</td>
+            </tr>
+            <tr class="dieharder">
+                <th class="dieharder">psamples</th>
+                <td class="dieharder">{{ res.psamples }}</td>
+            </tr>
+            <tr class="dieharder">
+                <th class="dieharder">p-value</th>
+                <td class="dieharder">{{ res.pvalue }}</td>
+            </tr>
+        </table>
+    </div>
+    {% endfor %}
+</body>
+</html>

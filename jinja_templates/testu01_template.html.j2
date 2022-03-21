@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TestU01 results for {{ tested_file }}</title>
+    <link rel="stylesheet" href="jinja_templates/css/styles.css">
+    <link rel="stylesheet" href="jinja_templates/css/testu01_styles.css">
+</head>
+<body class="testu01">
+    <h3>Input file: {{ tested_file }}</h3>
+    {% for res in list_of_results:%}
+    <div class="testu01">
+        <p class="testu01">
+        {{ res.statistics.replace("\n", "<br>") }}
+        </p>
+        <p class="testu01"><b>p-value: {{ res.p_value }}</b></p>
+    </div>
+    {% endfor %}
+</body>
+</html>
