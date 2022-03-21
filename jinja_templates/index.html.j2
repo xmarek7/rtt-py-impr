@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test results {{ timestamp }}</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="summary">
+    {% if bsi_files_list|length > 0 %}
+        <h2 class="summary">BSI results</h2>
+        {% for i in bsi_files_list %}
+            <a href="{{ i.html_path }}">{{ i.tested_file }}</a><br>
+        {% endfor %}
+    {% endif%}
+
+    {% if fips_files_list|length > 0 %}
+        <h2 class="summary">FIPS results</h2>
+        {% for i in fips_files_list %}
+            <a href="{{ i.html_path }}">{{ i.tested_file }}</a><br>
+        {% endfor %}
+    {% endif%}
+
+    {% if nist_files_list|length > 0 %}
+        <h2 class="summary">NIST results</h2>
+        {% for i in nist_files_list %}
+            <a href="{{ i.html_path }}">{{ i.tested_file }}</a><br>
+        {% endfor %}
+    {% endif%}
+
+    {% if dieharder_files_list|length > 0 %}
+        <h2 class="summary">DieHarder results</h2>
+        {% for i in dieharder_files_list %}
+            <a href="{{ i.html_path }}">{{ i.tested_file }}</a><br>
+        {% endfor %}
+    {% endif%}
+
+    {% if rabbit_files_list|length > 0 %}
+        <h2 class="summary">TestU01 - Rabbit results</h2>
+        {% for i in rabbit_files_list %}
+            <a href="{{ i.html_path }}">{{ i.tested_file }}</a><br>
+        {% endfor %}
+    {% endif%}
+
+    {% if alphabit_files_list|length > 0 %}
+        <h2 class="summary">TestU01 - Alphabit results</h2>
+        {% for i in alphabit_files_list %}
+            <a href="{{ i.html_path }}">{{ i.tested_file }}</a><br>
+        {% endfor %}
+    {% endif%}
+
+    {% if block_alphabit_files_list|length > 0 %}
+        <h2 class="summary">TestU01 - Block-Alphabit results</h2>
+        {% for i in block_alphabit_files_list %}
+            <a href="{{ i.html_path }}">{{ i.tested_file }}</a><br>
+        {% endfor %}
+    {% endif%}
+</body>
+</html>

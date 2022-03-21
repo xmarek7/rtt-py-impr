@@ -48,5 +48,6 @@ def generate_html_with_results(html_template: str, variables: dict, rendered_res
 # render TestU01
 # generate_html_with_results("jinja_templates/testu01_template.html.j2",
 #                 {"tested_file": "some_file.rnd",
-#                 "list_of_results": testu01_results},
+#                  "list_of_results": testu01_results,
+#                  "subbattery": "rabbit"},
 #                 "generated_report_tu01.html")
