@@ -1,7 +1,8 @@
 import os
 import json
-import time
+import datetime
 import logging
+from shutil import copytree
 
 from settings.bsi import BsiSettings
 from settings.nist import NistSettingsFactory
@@ -15,7 +16,6 @@ from executions.nist import NistExecution
 from executions.testu01 import TestU01Execution
 from executions.dieharder import DieharderExecution
 
-from shutil import copytree
 from tools.html_reports import generate_html_with_results
 
 
@@ -54,7 +54,7 @@ def init_logging(settings: LoggerSettings, timestamp: str):
 
 def main():
     # will be used as part of each output file's name
-    EXECUTION_TIMESTAMP = str(time.time())
+    EXECUTION_TIMESTAMP = datetime.datetime.now().isoformat()
     general_config = "/ws/rtt-py/tests/assets/configs/rtt-settings.json"
     test_spec = "/ws/rtt-py/tests/assets/configs/10MB.json"
     # general settings
