@@ -59,7 +59,8 @@ class DieharderExecution:
                 # [ DieharderResult{name: test_a, ntuple: 0, tsamples: 1, psamples: 2, p-value: 0.3}
                 #   DieharderResult{name: test_a, ntuple: 1, tsamples: 2, psamples: 3, p-value: 0.4}
                 #   DieharderResult{name: test_a, ntuple: 2, tsamples: 3, psamples: 4, p-value: 0.5}]
-                output_lines = test_execution.stdout.read().decode("utf-8").split("\n")
+                stdout = test_execution.stdout.read().decode("utf-8")
+                output_lines = stdout.split("\n")
                 # iterate through all the output lines
                 for output_line in output_lines:
                     # if you split one line, you get 2 strings.
@@ -70,9 +71,9 @@ class DieharderExecution:
                         ntuple = line_split[1]
                         tsamples = line_split[2]
                         psamples = line_split[3]
-                        pvalues = line_split[4]
+                        pvalue = line_split[4]
                         result_for_sequence.append(
-                            DieharderResult(test.test_id, test_name, ntuple, tsamples, psamples, pvalues))
+                            DieharderResult(test.test_id, test_name, ntuple, tsamples, psamples, pvalue))
                 if error_code != 0:
                     self.app_logger.error(f"Dieharder execution failed. Args: {cli_args}. STDOUT: \n{stdout}")
         return result_for_sequence
