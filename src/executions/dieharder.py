@@ -13,6 +13,7 @@ class DieharderExecution:
                  storage_settings: FileStorageSettings,
                  logger_settings: LoggerSettings,
                  timestamp: str):
+        self.alpha = 0.01
         self.battery_settings = dieharder_settings
         self.binaries_settings = binaries_settings
         self.execution_settings = execution_settings
@@ -26,8 +27,10 @@ class DieharderExecution:
     def execute_for_sequence(self, sequence_path: str) -> 'list[DieharderResult]':
         self.prepare_output_dirs()
         result_for_sequence: list[DieharderResult] = []
-        for test in self.battery_settings.per_test_config:
-            for variant in test.variants:
+        # indexing instead of range-based loop is needed
+        # because we are going to modify values
+        for i in range(len(self.battery_settings.per_test_config)):
+            for j in range(len(self.battery_settings.per_test_config[i].variants)):
                 cli_args = [
                     self.binaries_settings.dieharder,
                     # -D 33016 parameter causes dieharder to return results in the following format:
@@ -38,11 +41,13 @@ class DieharderExecution:
                     # 201 in dieharder means file_input_raw (for more info run ./dieharder -g 502)
                     "-g", "201",
                     # unique test id (see dieharder help for more info)
-                    "-d", str(test.test_id),
+                    "-d", str(
+                        self.battery_settings.per_test_config[i].test_id),
                     # psamples parameter
-                    "-p", str(variant.psamples),
+                    "-p", str(
+                        self.battery_settings.per_test_config[i].variants[j].psamples),
                     # additional arguments if specified in .json file
-                    *variant.arguments,
+                    *self.battery_settings.per_test_config[i].variants[j].arguments,
                     # file to be tested
                     "-f", sequence_path
                 ]
@@ -68,14 +73,19 @@ class DieharderExecution:
                     if len(output_line) > 0:
                         line_split = output_line.split("|")
                         test_name = line_split[0]
-                        ntuple = line_split[1]
-                        tsamples = line_split[2]
-                        psamples = line_split[3]
-                        pvalue = line_split[4]
+                        ntuple = int(line_split[1])
+                        tsamples = int(line_split[2])
+                        psamples = int(line_split[3])
+                        pvalue = float(line_split[4])
+                        if pvalue > self.alpha:
+                            # this is the reason why we need indexes
+                            self.battery_settings.per_test_config[i].variants[j].passed_variants += 1
+                        self.battery_settings.per_test_config[i].variants[j].executed_variants += 1
                         result_for_sequence.append(
-                            DieharderResult(test.test_id, test_name, ntuple, tsamples, psamples, pvalue))
+                            DieharderResult(self.battery_settings.per_test_config[i].test_id, test_name, ntuple, tsamples, psamples, pvalue))
                 if error_code != 0:
-                    self.app_logger.error(f"Dieharder execution failed. Args: {cli_args}. STDOUT: \n{stdout}")
+                    self.app_logger.error(
+                        f"Dieharder execution failed. Args: {cli_args}. STDOUT: \n{stdout}")
         return result_for_sequence
 
     def prepare_output_dirs(self):
