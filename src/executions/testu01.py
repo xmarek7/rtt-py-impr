@@ -1,21 +1,18 @@
 import logging
 from subprocess import Popen, PIPE
 from settings.testu01 import TestU01Settings
-from settings.general import BinariesSettings, ExecutionSettings, FileStorageSettings, LoggerSettings
+from settings.general import BinariesSettings, ExecutionSettings, FileStorageSettings, GeneralSettings, LoggerSettings
 from results.testu01 import TestU01Result, TestU01ResultFactory
 
 
 class TestU01Execution:
     def __init__(self, testu01_settings: TestU01Settings,
-                 binaries_settings: BinariesSettings,
-                 execution_settings: ExecutionSettings,
-                 storage_settings: FileStorageSettings,
-                 logger_settings: LoggerSettings):
+                 general_settings: GeneralSettings):
         self.battery_settings = testu01_settings
-        self.binaries_settings = binaries_settings
-        self.execution_settings = execution_settings
-        self.storage_settings = storage_settings
-        self.logger_settings = logger_settings
+        self.binaries_settings = general_settings.binaries
+        self.execution_settings = general_settings.execution
+        self.storage_settings = general_settings.storage
+        self.logger_settings = general_settings.logger
         self.app_logger = logging.getLogger()
 
     # example commands:

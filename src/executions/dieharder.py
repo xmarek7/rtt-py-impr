@@ -2,22 +2,19 @@ import logging
 import os
 from subprocess import Popen, PIPE
 from settings.dieharder import DieharderSettings
-from settings.general import BinariesSettings, ExecutionSettings, FileStorageSettings, LoggerSettings
+from settings.general import BinariesSettings, ExecutionSettings, FileStorageSettings, GeneralSettings, LoggerSettings
 from results.dieharder import DieharderResult
 
 
 class DieharderExecution:
     def __init__(self, dieharder_settings: DieharderSettings,
-                 binaries_settings: BinariesSettings,
-                 execution_settings: ExecutionSettings,
-                 storage_settings: FileStorageSettings,
-                 logger_settings: LoggerSettings):
+                 general_settings: GeneralSettings):
         self.alpha = 0.01
         self.battery_settings = dieharder_settings
-        self.binaries_settings = binaries_settings
-        self.execution_settings = execution_settings
-        self.storage_settings = storage_settings
-        self.logger_settings = logger_settings
+        self.binaries_settings = general_settings.binaries
+        self.execution_settings = general_settings.execution
+        self.storage_settings = general_settings.storage
+        self.logger_settings = general_settings.logger
         self.app_logger = logging.getLogger()
 
     # "dieharder -p 24 -d 101 -D 66047 -g 201

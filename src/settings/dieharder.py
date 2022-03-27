@@ -29,17 +29,20 @@ class DieharderSettings:
 
 
 class DieharderSettingsFactory:
-    def make_settings(dict_from: dict) -> DieharderSettings:
+    def make_settings(test_settings_json: dict) -> DieharderSettings:
+        settings = test_settings_json.get("dieharder-settings")
+        if not settings:
+            raise Exception("Configuration 'dieharder-settings' was not specified")
         dieharder_settings = None
         try:
-            defaults = dict_from["defaults"]
+            defaults = settings["defaults"]
             default_test_ids = parse_test_ids(defaults["test-ids"])
             default_psamples = defaults["psamples"]
             per_tid_settings = list()
             for tid in default_test_ids:  # fill per_tid_settings array with default settings, override later
                 per_tid_settings.append(DieharderTestIdSetting(
                     int(tid), [DieharderVariant([], default_psamples)]))  # defaults for each test id
-            specific_settings_raw = dict_from["test-specific-settings"]
+            specific_settings_raw = settings["test-specific-settings"]
             for specs in specific_settings_raw:
                 tid = int(specs["test-id"])
                 variants = list()

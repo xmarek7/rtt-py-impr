@@ -2,19 +2,16 @@ import json
 import logging
 import os
 from subprocess import Popen, PIPE
-from settings.general import ExecutionSettings, BinariesSettings, FileStorageSettings, LoggerSettings
+from settings.general import ExecutionSettings, BinariesSettings, FileStorageSettings, GeneralSettings, LoggerSettings
 from results.fips import FipsResult
 
 
 class FipsExecution:
-    def __init__(self, binaries_settings: BinariesSettings,
-                 execution_settings: ExecutionSettings,
-                 storage_settings: FileStorageSettings,
-                 logger_settings: LoggerSettings):
-        self.binaries_settings = binaries_settings
-        self.execution_settings = execution_settings
-        self.storage_settings = storage_settings
-        self.logger_settings = logger_settings
+    def __init__(self, general_settings: GeneralSettings):
+        self.binaries_settings = general_settings.binaries
+        self.execution_settings = general_settings.execution
+        self.storage_settings = general_settings.storage
+        self.logger_settings = general_settings.logger
         self.app_logger = logging.getLogger()
 
     def execute_for_sequence(self, sequence_path) -> 'list[FipsResult]':

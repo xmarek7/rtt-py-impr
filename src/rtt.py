@@ -1,6 +1,5 @@
 import os
 import json
-import datetime
 import logging
 from shutil import copytree
 from results.bsi import BsiResult
@@ -11,7 +10,7 @@ from settings.bsi import BsiSettings
 from settings.nist import NistSettingsFactory
 from settings.testu01 import TestU01SettingsFactory
 from settings.dieharder import DieharderSettingsFactory
-from settings.general import FileStorageSettings, BinariesSettings, LoggerSettings, ExecutionSettings
+from settings.general import FileStorageSettings, BinariesSettings, GeneralSettingsFactory, LoggerSettings, ExecutionSettings
 
 from executions.bsi import BsiExecution
 from executions.fips import FipsExecution
@@ -24,20 +23,20 @@ from tools.final_reports import finalize_bsi_fips_results, finalize_nist_results
 
 
 # TODO: better name
-class SummaryPerBat:
+class HtmlSummary:
     def __init__(self, html_path, tested_file):
         self.html_path = html_path
         self.tested_file = tested_file
 
 
-def init_logging(settings: LoggerSettings):
+def init_logging(settings: LoggerSettings) -> logging.Logger:
     base_dir = settings.dir_prefix
     os.makedirs(base_dir, exist_ok=True)
     run_log_dir = settings.run_log_dir
     os.makedirs(run_log_dir, exist_ok=True)
     run_log_filename = settings.TIMESTAMP + "_run.log"
     run_log_file = os.path.join(run_log_dir, run_log_filename)
-    root_logger = logging.getLogger()
+    main_logger = logging.getLogger()
     default_formatter = logging.Formatter(
         fmt="[%(levelname)s] %(asctime)s - %(message)s \n")
     stdout_handler = logging.StreamHandler()
@@ -46,60 +45,119 @@ def init_logging(settings: LoggerSettings):
     file_handler = logging.FileHandler(filename=run_log_file, mode="w")
     file_handler.setFormatter(default_formatter)
     file_handler.setLevel(logging.DEBUG)
-    root_logger.addHandler(stdout_handler)
-    root_logger.addHandler(file_handler)
-    root_logger.setLevel(logging.DEBUG)
+    main_logger.addHandler(stdout_handler)
+    main_logger.addHandler(file_handler)
+    main_logger.setLevel(logging.DEBUG)
+    return main_logger
 
 
 def main():
-    # will be used as part of each output file's name
-    EXECUTION_TIMESTAMP = datetime.datetime.now().isoformat()
     general_config = "/ws/rtt-py/tests/assets/configs/rtt-settings.json"
     test_spec = "/ws/rtt-py/tests/assets/configs/10MB.json"
+    for file in [general_config, test_spec]:
+        if not os.path.isfile(file):
+            print(f"[ERROR] - File {file} does not exist")
+
     # general settings
-    rtt_json = json.loads(
-        open(general_config).read())["toolkit-settings"]
-    logger_settings = LoggerSettings(rtt_json["logger"])
-    binaries_settings = BinariesSettings(rtt_json["binaries"])
-    execution_settings = ExecutionSettings(rtt_json["execution"])
-    file_storage_settings = FileStorageSettings(
-        rtt_json["result-storage"]["file"])
+    try:
+        rtt_json = json.loads(
+            open(general_config).read())["toolkit-settings"]
+    except Exception as err:
+        print(f"[ERROR] - Loading {general_config} failed. Reason:\n{err}")
+        exit(1)
+    general_settings = GeneralSettingsFactory.make_general_settings(rtt_json)
 
-    init_logging(logger_settings)
+    main_logger = init_logging(general_settings.logger)
 
-    # battery settings
-    bat_json = json.loads(open(
-        test_spec).read())["randomness-testing-toolkit"]
-    bsi_settings = BsiSettings(bat_json["bsi-settings"])
-    nist_settings = NistSettingsFactory.make_settings(
-        bat_json["nist-sts-settings"])
-    dieharder_settings = DieharderSettingsFactory.make_settings(
-        bat_json["dieharder-settings"])
-    tu01_rabbit_settings = TestU01SettingsFactory.make_settings(
-        bat_json["tu01-rabbit-settings"], "rabbit")
-    tu01_alphabit_settings = TestU01SettingsFactory.make_settings(
-        bat_json["tu01-alphabit-settings"], "alphabit")
-    tu01_block_alphabit_settings = TestU01SettingsFactory.make_settings(
-        bat_json["tu01-blockalphabit-settings"], "block_alphabit")
+    # test settings
+    try:
+        test_settings = json.loads(open(
+            test_spec).read())
+        test_settings = test_settings.get("randomness-testing-toolkit")
+        if not test_settings:
+            raise Exception(
+                f"File {test_spec} does not contain 'randomness-testing-toolkit' config entry")
+    except Exception as err:
+        main_logger.error(
+            f"Loading {test_spec} failed. Reason:\n{err}")
+        exit(1)
+
+    # bsi test settings
+    try:
+        bsi_settings = BsiSettings(test_settings)
+    except Exception as err:
+        main_logger.warn(
+            f"Settings for BSI battery provided in file {test_spec} are not valid. Reason:\n{err}")
+        main_logger.warn("Tests from BSI battery will not be executed")
+        bsi_settings = None
+
+    # nist test settings
+    try:
+        nist_settings = NistSettingsFactory.make_settings(
+            test_settings)
+    except Exception as err:
+        main_logger.warn(
+            f"Settings for NIST battery provided in file {test_spec} are not valid. Reason:\n{err}")
+        main_logger.warn("Tests from NIST battery will not be executed")
+        nist_settings = None
+
+    # DieHarder test settings
+    try:
+        dieharder_settings = DieharderSettingsFactory.make_settings(
+            test_settings)
+    except Exception as err:
+        main_logger.warn(
+            f"Settings for DieHarder battery provided in file {test_spec} are not valid. Reason:\n{err}")
+        main_logger.warn("Tests from DieHarder battery will not be executed")
+        dieharder_settings = None
+
+    # TestU01 rabbit test settings
+    try:
+        tu01_rabbit_settings = TestU01SettingsFactory.make_settings(
+            test_settings, "rabbit")
+    except Exception as err:
+        main_logger.warn(
+            f"Settings for TU01-Rabbit battery provided in file {test_spec} are not valid. Reason:\n{err}")
+        main_logger.warn("Tests from TU01-Rabbit battery will not be executed")
+        tu01_rabbit_settings = None
+
+    # TestU01 alphabit test settings
+    try:
+        tu01_alphabit_settings = TestU01SettingsFactory.make_settings(
+            test_settings, "alphabit")
+    except Exception as err:
+        main_logger.warn(
+            f"Settings for TU01-Alphabit battery provided in file {test_spec} are not valid. Reason:\n{err}")
+        main_logger.warn(
+            "Tests from TU01-Alphabit battery will not be executed")
+        tu01_alphabit_settings = None
+
+    # TestU01 block-alphabit test settings
+    try:
+        tu01_block_alphabit_settings = TestU01SettingsFactory.make_settings(
+            test_settings, "block_alphabit")
+    except Exception as err:
+        main_logger.warn(
+            f"Settings for TU01-Block-Alphabit battery provided in file {test_spec} are not valid. Reason:\n{err}")
+        main_logger.warn(
+            "Tests from TU01-Block-Alphabit battery will not be executed")
+        tu01_block_alphabit_settings = None
 
     # execution initialization
-    bsi_execution = BsiExecution(bsi_settings, binaries_settings, execution_settings,
-                                 file_storage_settings, logger_settings)
-    fips_execution = FipsExecution(binaries_settings, execution_settings,
-                                   file_storage_settings, logger_settings)
-    nist_execution = NistExecution(nist_settings, binaries_settings, execution_settings,
-                                   file_storage_settings, logger_settings)
+    bsi_execution = BsiExecution(bsi_settings, general_settings)
+    fips_execution = FipsExecution(general_settings)
+    nist_execution = NistExecution(nist_settings, general_settings)
     dieharder_execution = DieharderExecution(
-        dieharder_settings, binaries_settings, execution_settings, file_storage_settings, logger_settings)
+        dieharder_settings, general_settings)
     tu01_rabbit_execution = TestU01Execution(
-        tu01_rabbit_settings, binaries_settings, execution_settings, file_storage_settings, logger_settings)
+        tu01_rabbit_settings, general_settings)
     tu01_alphabit_execution = TestU01Execution(
-        tu01_alphabit_settings, binaries_settings, execution_settings, file_storage_settings, logger_settings)
+        tu01_alphabit_settings, general_settings)
     tu01_block_alphabit_execution = TestU01Execution(
-        tu01_block_alphabit_settings, binaries_settings, execution_settings, file_storage_settings, logger_settings)
+        tu01_block_alphabit_settings, general_settings)
 
     execution_html_dir = os.path.join(
-        file_storage_settings.dir_prefix, "html", logger_settings.TIMESTAMP)
+        general_settings.storage.dir_prefix, "html", general_settings.logger.TIMESTAMP)
     os.makedirs(execution_html_dir, exist_ok=True)
     # just to have fancy html
     copytree("jinja_templates/css", os.path.join(execution_html_dir, "css"))
@@ -109,13 +167,13 @@ def main():
     for per_battery_dir in configured_batteries:
         os.mkdir(os.path.join(execution_html_dir, per_battery_dir))
 
-    bsi_report_files: list[SummaryPerBat] = []
-    fips_report_files: list[SummaryPerBat] = []
-    nist_report_files: list[SummaryPerBat] = []
-    dh_report_files: list[SummaryPerBat] = []
-    rabbit_report_files: list[SummaryPerBat] = []
-    alphabit_report_files: list[SummaryPerBat] = []
-    block_alphabit_report_files: list[SummaryPerBat] = []
+    bsi_report_files: list[HtmlSummary] = []
+    fips_report_files: list[HtmlSummary] = []
+    nist_report_files: list[HtmlSummary] = []
+    dh_report_files: list[HtmlSummary] = []
+    rabbit_report_files: list[HtmlSummary] = []
+    alphabit_report_files: list[HtmlSummary] = []
+    block_alphabit_report_files: list[HtmlSummary] = []
 
     all_bsi_results: list[list[BsiResult]] = []
     all_fips_results: list[list[FipsResult]] = []
@@ -137,7 +195,7 @@ def main():
             "jinja_templates/bsi_template.html.j2",
             {"tested_file": input_file, "list_of_results": bsi_results},
             bsi_report_file)
-        bsi_report_files.append(SummaryPerBat(
+        bsi_report_files.append(HtmlSummary(
             bsi_report_file.replace(execution_html_dir + "/", ""), input_file))
         # fips exec
         fips_results = fips_execution.execute_for_sequence(input_file)
@@ -151,7 +209,7 @@ def main():
             {"tested_file": input_file, "battery_accepted": fips_bat_accepted,
                 "list_of_results": fips_results},
             fips_report_file)
-        fips_report_files.append(SummaryPerBat(
+        fips_report_files.append(HtmlSummary(
             fips_report_file.replace(execution_html_dir + "/", ""), input_file))
         # nist exec
         nist_results = nist_execution.execute_for_sequence(input_file)
@@ -162,7 +220,7 @@ def main():
             "jinja_templates/nist_template.html.j2",
             {"tested_file": input_file, "list_of_results": nist_results},
             nist_report_file)
-        nist_report_files.append(SummaryPerBat(
+        nist_report_files.append(HtmlSummary(
             nist_report_file.replace(execution_html_dir + "/", ""), input_file))
         # dieharder exec
         dh_results = dieharder_execution.execute_for_sequence(input_file)
@@ -172,7 +230,7 @@ def main():
             "jinja_templates/dieharder_template.html.j2",
             {"tested_file": input_file, "list_of_results": dh_results},
             dh_report_file)
-        dh_report_files.append(SummaryPerBat(
+        dh_report_files.append(HtmlSummary(
             dh_report_file.replace(execution_html_dir + "/", ""), input_file))
         # rabbit exec
         rabbit_results = tu01_rabbit_execution.execute_for_sequence(input_file)
@@ -183,7 +241,7 @@ def main():
             {"tested_file": input_file, "list_of_results": rabbit_results,
                 "subbattery": "rabbit"},
             rabbit_report_file)
-        rabbit_report_files.append(SummaryPerBat(
+        rabbit_report_files.append(HtmlSummary(
             rabbit_report_file.replace(execution_html_dir + "/", ""), input_file))
         # alphabit exec
         alphabit_results = tu01_alphabit_execution.execute_for_sequence(
@@ -195,7 +253,7 @@ def main():
             {"tested_file": input_file, "list_of_results": alphabit_results,
                 "subbattery": "alphabit"},
             alphabit_report_file)
-        alphabit_report_files.append(SummaryPerBat(
+        alphabit_report_files.append(HtmlSummary(
             alphabit_report_file.replace(execution_html_dir + "/", ""), input_file))
         # block_alphabit exec
         block_alphabit_results = tu01_block_alphabit_execution.execute_for_sequence(
@@ -208,7 +266,7 @@ def main():
                 "subbattery": "block_alphabit"},
             block_alphabit_report_file)
         block_alphabit_report_files.append(
-            SummaryPerBat(block_alphabit_report_file.replace(execution_html_dir + "/", ""), input_file))
+            HtmlSummary(block_alphabit_report_file.replace(execution_html_dir + "/", ""), input_file))
 
     generate_html_with_results("jinja_templates/index.html.j2",
                                {"bsi_files_list": bsi_report_files,

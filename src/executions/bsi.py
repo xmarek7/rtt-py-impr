@@ -3,21 +3,17 @@ import os
 import logging
 from subprocess import Popen, PIPE
 from settings.bsi import BsiSettings
-from settings.general import ExecutionSettings, BinariesSettings, FileStorageSettings, LoggerSettings
+from settings.general import ExecutionSettings, BinariesSettings, FileStorageSettings, GeneralSettings, LoggerSettings
 from results.bsi import BsiResult
 
 
 class BsiExecution:
-    def __init__(self, bsi_settings: BsiSettings,
-                 binaries_settings: BinariesSettings,
-                 execution_settings: ExecutionSettings,
-                 storage_settings: FileStorageSettings,
-                 logger_settings: LoggerSettings):
+    def __init__(self, bsi_settings: BsiSettings, general_settings: GeneralSettings):
         self.battery_settings = bsi_settings
-        self.binaries_settings = binaries_settings
-        self.execution_settings = execution_settings
-        self.storage_settings = storage_settings
-        self.logger_settings = logger_settings
+        self.binaries_settings = general_settings.binaries
+        self.execution_settings = general_settings.execution
+        self.storage_settings = general_settings.storage
+        self.logger_settings = general_settings.logger
         self.app_logger = logging.getLogger()
 
     def execute_for_sequence(self, sequence_path) -> 'list[BsiResult]':

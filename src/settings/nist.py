@@ -10,10 +10,14 @@ class NistSettings:
 
 class NistSettingsFactory:
     """Parses JSON battery config and creates NistSettings object"""
-    def make_settings(dict_from: dict) -> NistSettings:
+    def make_settings(test_settings_json: dict) -> NistSettings:
+        settings = test_settings_json.get("nist-sts-settings")
+        if not settings:
+            raise Exception(
+                "Configuration 'nist-sts-settings' was not specified")
         nist_settings = None
         try:
-            defaults = dict_from["defaults"]
+            defaults = settings["defaults"]
             test_ids = tools.misc.parse_test_ids(defaults["test-ids"])
             stream_size = int(defaults["stream-size"])
             stream_count = int(defaults["stream-count"])

@@ -24,10 +24,17 @@ class TestU01Settings:
 
 
 class TestU01SettingsFactory:
-    def make_settings(dict_from: dict, test_subbattery: str) -> TestU01Settings:
+    def make_settings(test_settings_json: dict, test_subbattery: str) -> TestU01Settings:
+        # for example, block_alphabit subbattery has config entry 'tu01-blockalphabit-settings'
+        # that's why we are replacing '_'
+        config_entry = f"tu01-{test_subbattery}-settings".replace("_", "")
+        settings = test_settings_json.get(config_entry)
+        if not settings:
+            raise Exception(
+                f"Configuration '{config_entry}' was not specified")
         try:
             per_tid_settings: list[TestU01TestIdSettings] = []
-            defaults = dict_from["defaults"]
+            defaults = settings["defaults"]
             default_test_ids = parse_test_ids(defaults["test-ids"])
             reps = int(defaults["repetitions"])
             bit_nb = defaults.get("bit-nb")
@@ -41,17 +48,20 @@ class TestU01SettingsFactory:
             for tid in default_test_ids:
                 per_tid_settings.append(TestU01TestIdSettings(
                     tid, [TestU01Variant(reps, bit_nb, bit_r, bit_s, bit_w)]))
-            specific_settings_raw = dict_from.get("test-specific-settings")
+            specific_settings_raw = settings.get("test-specific-settings")
             if specific_settings_raw:
                 for specific_settings in specific_settings_raw:
                     tid = int(specific_settings["test-id"])
                     spec_reps = int(defaults["repetitions"])
                     spec_bit_r = specific_settings.get("bit-r")
-                    spec_bit_r = int(spec_bit_r) if spec_bit_r is not None else bit_r
+                    spec_bit_r = int(
+                        spec_bit_r) if spec_bit_r is not None else bit_r
                     spec_bit_s = specific_settings.get("bit-s")
-                    spec_bit_s = int(spec_bit_s) if spec_bit_s is not None else bit_s
+                    spec_bit_s = int(
+                        spec_bit_s) if spec_bit_s is not None else bit_s
                     spec_bit_w = specific_settings.get("bit-w")
-                    spec_bit_w = int(spec_bit_w) if spec_bit_w is not None else bit_w
+                    spec_bit_w = int(
+                        spec_bit_w) if spec_bit_w is not None else bit_w
                     variants: list[TestU01Variant] = []
                     variants_raw = specific_settings.get("variants")
                     if variants_raw:
@@ -65,7 +75,8 @@ class TestU01SettingsFactory:
                             var_bit_w = variant.get("bit-w")
                             var_bit_w = int(
                                 var_bit_w) if var_bit_w is not None else spec_bit_w
-                            variants.append(TestU01Variant(spec_reps, bit_nb, var_bit_r, var_bit_s, var_bit_w))
+                            variants.append(TestU01Variant(
+                                spec_reps, bit_nb, var_bit_r, var_bit_s, var_bit_w))
                     else:
                         variants.append(TestU01Variant(
                             spec_reps, bit_nb, spec_bit_r, spec_bit_s, spec_bit_w))

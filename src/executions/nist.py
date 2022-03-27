@@ -6,20 +6,17 @@ from subprocess import Popen, PIPE
 from results.nist import NistResult, NistResultFactory
 from tools.misc import nist_test_ids_to_param
 from settings.nist import NistSettings
-from settings.general import BinariesSettings, ExecutionSettings, FileStorageSettings, LoggerSettings
+from settings.general import BinariesSettings, ExecutionSettings, FileStorageSettings, GeneralSettings, LoggerSettings
 
 
 class NistExecution:
     def __init__(self, nist_settings: NistSettings,
-                 binaries_settings: BinariesSettings,
-                 execution_settings: ExecutionSettings,
-                 storage_settings: FileStorageSettings,
-                 logger_settings: LoggerSettings):
+                 general_settings: GeneralSettings):
         self.battery_settings = nist_settings
-        self.binaries_settings = binaries_settings
-        self.execution_settings = execution_settings
-        self.storage_settings = storage_settings
-        self.logger_settings = logger_settings
+        self.binaries_settings = general_settings.binaries
+        self.execution_settings = general_settings.execution
+        self.storage_settings = general_settings.storage
+        self.logger_settings = general_settings.logger
         self.test_ids_param = nist_test_ids_to_param(
             self.battery_settings.test_ids)
         self.app_logger = logging.getLogger()
