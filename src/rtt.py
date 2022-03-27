@@ -30,12 +30,12 @@ class SummaryPerBat:
         self.tested_file = tested_file
 
 
-def init_logging(settings: LoggerSettings, timestamp: str):
+def init_logging(settings: LoggerSettings):
     base_dir = settings.dir_prefix
     os.makedirs(base_dir, exist_ok=True)
     run_log_dir = settings.run_log_dir
     os.makedirs(run_log_dir, exist_ok=True)
-    run_log_filename = timestamp + "_run.log"
+    run_log_filename = settings.TIMESTAMP + "_run.log"
     run_log_file = os.path.join(run_log_dir, run_log_filename)
     root_logger = logging.getLogger()
     default_formatter = logging.Formatter(
@@ -65,7 +65,7 @@ def main():
     file_storage_settings = FileStorageSettings(
         rtt_json["result-storage"]["file"])
 
-    init_logging(logger_settings, EXECUTION_TIMESTAMP)
+    init_logging(logger_settings)
 
     # battery settings
     bat_json = json.loads(open(
@@ -84,22 +84,22 @@ def main():
 
     # execution initialization
     bsi_execution = BsiExecution(bsi_settings, binaries_settings, execution_settings,
-                                 file_storage_settings, logger_settings, EXECUTION_TIMESTAMP)
+                                 file_storage_settings, logger_settings)
     fips_execution = FipsExecution(binaries_settings, execution_settings,
-                                   file_storage_settings, logger_settings, EXECUTION_TIMESTAMP)
+                                   file_storage_settings, logger_settings)
     nist_execution = NistExecution(nist_settings, binaries_settings, execution_settings,
-                                   file_storage_settings, logger_settings, EXECUTION_TIMESTAMP)
+                                   file_storage_settings, logger_settings)
     dieharder_execution = DieharderExecution(
-        dieharder_settings, binaries_settings, execution_settings, file_storage_settings, logger_settings, EXECUTION_TIMESTAMP)
+        dieharder_settings, binaries_settings, execution_settings, file_storage_settings, logger_settings)
     tu01_rabbit_execution = TestU01Execution(
-        tu01_rabbit_settings, binaries_settings, execution_settings, file_storage_settings, logger_settings, EXECUTION_TIMESTAMP)
+        tu01_rabbit_settings, binaries_settings, execution_settings, file_storage_settings, logger_settings)
     tu01_alphabit_execution = TestU01Execution(
-        tu01_alphabit_settings, binaries_settings, execution_settings, file_storage_settings, logger_settings, EXECUTION_TIMESTAMP)
+        tu01_alphabit_settings, binaries_settings, execution_settings, file_storage_settings, logger_settings)
     tu01_block_alphabit_execution = TestU01Execution(
-        tu01_block_alphabit_settings, binaries_settings, execution_settings, file_storage_settings, logger_settings, EXECUTION_TIMESTAMP)
+        tu01_block_alphabit_settings, binaries_settings, execution_settings, file_storage_settings, logger_settings)
 
     execution_html_dir = os.path.join(
-        file_storage_settings.dir_prefix, "html", EXECUTION_TIMESTAMP)
+        file_storage_settings.dir_prefix, "html", logger_settings.TIMESTAMP)
     os.makedirs(execution_html_dir, exist_ok=True)
     # just to have fancy html
     copytree("jinja_templates/css", os.path.join(execution_html_dir, "css"))

@@ -11,15 +11,13 @@ class DieharderExecution:
                  binaries_settings: BinariesSettings,
                  execution_settings: ExecutionSettings,
                  storage_settings: FileStorageSettings,
-                 logger_settings: LoggerSettings,
-                 timestamp: str):
+                 logger_settings: LoggerSettings):
         self.alpha = 0.01
         self.battery_settings = dieharder_settings
         self.binaries_settings = binaries_settings
         self.execution_settings = execution_settings
         self.storage_settings = storage_settings
         self.logger_settings = logger_settings
-        self.timestamp = timestamp
         self.app_logger = logging.getLogger()
 
     # "dieharder -p 24 -d 101 -D 66047 -g 201

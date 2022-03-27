@@ -10,19 +10,17 @@ class FipsExecution:
     def __init__(self, binaries_settings: BinariesSettings,
                  execution_settings: ExecutionSettings,
                  storage_settings: FileStorageSettings,
-                 logger_settings: LoggerSettings,
-                 timestamp: str):
+                 logger_settings: LoggerSettings):
         self.binaries_settings = binaries_settings
         self.execution_settings = execution_settings
         self.storage_settings = storage_settings
         self.logger_settings = logger_settings
-        self.timestamp = timestamp
         self.app_logger = logging.getLogger()
 
     def execute_for_sequence(self, sequence_path) -> 'list[FipsResult]':
         self.prepare_output_dirs()
         execution_result: list[FipsResult] = []
-        output_filename = self.timestamp + "_" + \
+        output_filename = self.logger_settings.TIMESTAMP + "_" + \
             os.path.splitext(
                 os.path.basename(sequence_path))[0] + ".json"
         out_file = os.path.join(

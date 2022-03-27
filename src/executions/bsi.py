@@ -12,20 +12,18 @@ class BsiExecution:
                  binaries_settings: BinariesSettings,
                  execution_settings: ExecutionSettings,
                  storage_settings: FileStorageSettings,
-                 logger_settings: LoggerSettings,
-                 execution_timestamp: str):
+                 logger_settings: LoggerSettings):
         self.battery_settings = bsi_settings
         self.binaries_settings = binaries_settings
         self.execution_settings = execution_settings
         self.storage_settings = storage_settings
         self.logger_settings = logger_settings
-        self.timestamp = execution_timestamp
         self.app_logger = logging.getLogger()
 
     def execute_for_sequence(self, sequence_path) -> 'list[BsiResult]':
         self.prepare_output_dirs()
         execution_result: list[BsiResult] = []
-        output_filename = str(self.timestamp) + "_" + \
+        output_filename = str(self.logger_settings.TIMESTAMP) + "_" + \
             os.path.splitext(os.path.basename(sequence_path))[0] + ".json"
         out_file = os.path.join(self.storage_settings.bsi_dir, output_filename)
         self.app_logger.info(f"BSI results will be saved to {out_file}")
@@ -54,8 +52,8 @@ class BsiExecution:
                 execution_result.append(BsiResult(
                     test_result["name"],
                     test_result["error"],
-                    test_result["num_runs"],
-                    test_result["num_failures"]))
+                    test_result.get("num_runs"),
+                    test_result.get("num_failures")))
         return execution_result
 
     def get_skip_test_args(self) -> list:

@@ -1,8 +1,9 @@
+import datetime
 import os
 
 class LoggerSettings:
     def __init__(self, dict_from: dict):
-        self.dir_prefix = dict_from["dir-prefix"]
+        self.dir_prefix = os.path.abspath(dict_from["dir-prefix"])
         self.config_entries = [
             "run-log-dir",
             "dieharder-dir",
@@ -29,6 +30,7 @@ class LoggerSettings:
         self.bsi_dir = None
         for key in self.config_entries:
             setattr(self, key.replace('-', '_'), os.path.join(self.dir_prefix, dict_from[key]))
+        self.TIMESTAMP = datetime.datetime.now().isoformat()
 
     def __str__(self):
         __str = "# " + self.__class__.__name__ + " {\n"

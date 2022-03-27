@@ -14,8 +14,7 @@ class NistExecution:
                  binaries_settings: BinariesSettings,
                  execution_settings: ExecutionSettings,
                  storage_settings: FileStorageSettings,
-                 logger_settings: LoggerSettings,
-                 timestamp: str):
+                 logger_settings: LoggerSettings):
         self.battery_settings = nist_settings
         self.binaries_settings = binaries_settings
         self.execution_settings = execution_settings
@@ -24,7 +23,6 @@ class NistExecution:
         self.test_ids_param = nist_test_ids_to_param(
             self.battery_settings.test_ids)
         self.app_logger = logging.getLogger()
-        self.timestamp = timestamp
         self.nist_templates_dir = os.path.join(
             os.path.dirname(os.path.abspath(__file__)), "nist_templates")
 
