@@ -1,4 +1,3 @@
-from ast import List
 import logging
 from subprocess import Popen, PIPE
 from settings.testu01 import TestU01Settings

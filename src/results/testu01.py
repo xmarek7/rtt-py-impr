@@ -59,12 +59,11 @@ class TestU01ResultFactory:
                 if match:
                     statistics = match.group(0).replace("CPU time used", "")
                     # collect all the lines containing pvals to a list
-                    pvals = FIND_PVALUES_REGEX.findall(statistics)
-                    for pval_str in pvals:
-                        # extract the float from string
-                        pval_match = EXTRACT_PVALUES_REGEX.match(pval_str)
-                        pval = pval_match.group(1) if pval_match else None
-                        if pval:  # no error, appending to return variable
-                            results.append(TestU01Result(
-                                statistics, float(pval)))
+                    # TODO: decide what to do with other pvalues
+                    pval_str = FIND_PVALUES_REGEX.findall(statistics)[-1] # take last
+                    pval_match = EXTRACT_PVALUES_REGEX.match(pval_str)
+                    pval = pval_match.group(1) if pval_match else None
+                    if pval:  # no error, appending to return variable
+                        results.append(TestU01Result(
+                            statistics, float(pval)))
         return results
