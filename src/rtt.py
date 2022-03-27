@@ -3,6 +3,9 @@ import json
 import datetime
 import logging
 from shutil import copytree
+from results.bsi import BsiResult
+from results.fips import FipsResult
+from results.nist import NistResult
 
 from settings.bsi import BsiSettings
 from settings.nist import NistSettingsFactory
@@ -17,11 +20,7 @@ from executions.testu01 import TestU01Execution
 from executions.dieharder import DieharderExecution
 
 from tools.html_reports import generate_html_with_results
-
-
-# TODO: implement
-def generate_summary_report():
-    pass
+from tools.final_reports import finalize_bsi_fips_results, finalize_nist_results, finalize_dieharder_results
 
 
 # TODO: better name
@@ -118,90 +117,98 @@ def main():
     alphabit_report_files: list[SummaryPerBat] = []
     block_alphabit_report_files: list[SummaryPerBat] = []
 
+    all_bsi_results: list[list[BsiResult]] = []
+    all_fips_results: list[list[FipsResult]] = []
+    all_nist_results: list[list[NistResult]] = []
+
     input_files = [
         "/ws/rtt-py/tests/assets/rnd/10MB.rnd",
         "/ws/rtt-statistical-batteries/bsi-src/assets/bsi_input.rnd",
     ]
-    for f in input_files:
-        input_file_basename = os.path.basename(f)
+    for input_file in input_files:
+        input_file_basename = os.path.basename(input_file)
         html_result_file = input_file_basename + ".html"
         # bsi exec
-        bsi_results = bsi_execution.execute_for_sequence(f)
+        bsi_results = bsi_execution.execute_for_sequence(input_file)
+        all_bsi_results.append(bsi_results)
         bsi_report_file = os.path.join(
             execution_html_dir, "bsi", html_result_file)
         generate_html_with_results(
             "jinja_templates/bsi_template.html.j2",
-            {"tested_file": f, "list_of_results": bsi_results},
+            {"tested_file": input_file, "list_of_results": bsi_results},
             bsi_report_file)
         bsi_report_files.append(SummaryPerBat(
-            bsi_report_file.replace(execution_html_dir + "/", ""), f))
+            bsi_report_file.replace(execution_html_dir + "/", ""), input_file))
         # fips exec
-        fips_results = fips_execution.execute_for_sequence(f)
+        fips_results = fips_execution.execute_for_sequence(input_file)
+        all_fips_results.append(fips_results)
         fips_bat_accepted = fips_results[0].battery_accepted if len(
             fips_results) > 0 else False
         fips_report_file = os.path.join(
             execution_html_dir, "fips", html_result_file)
         generate_html_with_results(
             "jinja_templates/fips_template.html.j2",
-            {"tested_file": f, "battery_accepted": fips_bat_accepted,
+            {"tested_file": input_file, "battery_accepted": fips_bat_accepted,
                 "list_of_results": fips_results},
             fips_report_file)
         fips_report_files.append(SummaryPerBat(
-            fips_report_file.replace(execution_html_dir + "/", ""), f))
+            fips_report_file.replace(execution_html_dir + "/", ""), input_file))
         # nist exec
-        nist_results = nist_execution.execute_for_sequence(f)
+        nist_results = nist_execution.execute_for_sequence(input_file)
+        all_nist_results.append(nist_results)
         nist_report_file = os.path.join(
             execution_html_dir, "nist", html_result_file)
         generate_html_with_results(
             "jinja_templates/nist_template.html.j2",
-            {"tested_file": f, "list_of_results": nist_results},
+            {"tested_file": input_file, "list_of_results": nist_results},
             nist_report_file)
         nist_report_files.append(SummaryPerBat(
-            nist_report_file.replace(execution_html_dir + "/", ""), f))
+            nist_report_file.replace(execution_html_dir + "/", ""), input_file))
         # dieharder exec
-        dh_results = dieharder_execution.execute_for_sequence(f)
+        dh_results = dieharder_execution.execute_for_sequence(input_file)
         dh_report_file = os.path.join(
             execution_html_dir, "dieharder", html_result_file)
         generate_html_with_results(
             "jinja_templates/dieharder_template.html.j2",
-            {"tested_file": f, "list_of_results": dh_results},
+            {"tested_file": input_file, "list_of_results": dh_results},
             dh_report_file)
         dh_report_files.append(SummaryPerBat(
-            dh_report_file.replace(execution_html_dir + "/", ""), f))
+            dh_report_file.replace(execution_html_dir + "/", ""), input_file))
         # rabbit exec
-        rabbit_results = tu01_rabbit_execution.execute_for_sequence(f)
+        rabbit_results = tu01_rabbit_execution.execute_for_sequence(input_file)
         rabbit_report_file = os.path.join(
             execution_html_dir, "rabbit", html_result_file)
         generate_html_with_results(
             "jinja_templates/testu01_template.html.j2",
-            {"tested_file": f, "list_of_results": rabbit_results,
+            {"tested_file": input_file, "list_of_results": rabbit_results,
                 "subbattery": "rabbit"},
             rabbit_report_file)
         rabbit_report_files.append(SummaryPerBat(
-            rabbit_report_file.replace(execution_html_dir + "/", ""), f))
+            rabbit_report_file.replace(execution_html_dir + "/", ""), input_file))
         # alphabit exec
-        alphabit_results = tu01_alphabit_execution.execute_for_sequence(f)
+        alphabit_results = tu01_alphabit_execution.execute_for_sequence(
+            input_file)
         alphabit_report_file = os.path.join(
             execution_html_dir, "alphabit", html_result_file)
         generate_html_with_results(
             "jinja_templates/testu01_template.html.j2",
-            {"tested_file": f, "list_of_results": alphabit_results,
+            {"tested_file": input_file, "list_of_results": alphabit_results,
                 "subbattery": "alphabit"},
             alphabit_report_file)
         alphabit_report_files.append(SummaryPerBat(
-            alphabit_report_file.replace(execution_html_dir + "/", ""), f))
+            alphabit_report_file.replace(execution_html_dir + "/", ""), input_file))
         # block_alphabit exec
         block_alphabit_results = tu01_block_alphabit_execution.execute_for_sequence(
-            f)
+            input_file)
         block_alphabit_report_file = os.path.join(
             execution_html_dir, "block_alphabit", html_result_file)
         generate_html_with_results(
             "jinja_templates/testu01_template.html.j2",
-            {"tested_file": f, "list_of_results": block_alphabit_results,
+            {"tested_file": input_file, "list_of_results": block_alphabit_results,
                 "subbattery": "block_alphabit"},
             block_alphabit_report_file)
         block_alphabit_report_files.append(
-            SummaryPerBat(block_alphabit_report_file.replace(execution_html_dir + "/", ""), f))
+            SummaryPerBat(block_alphabit_report_file.replace(execution_html_dir + "/", ""), input_file))
 
     generate_html_with_results("jinja_templates/index.html.j2",
                                {"bsi_files_list": bsi_report_files,
@@ -213,7 +220,22 @@ def main():
                                 "block_alphabit_files_list": block_alphabit_report_files,
                                 },
                                os.path.join(execution_html_dir, "index.html"))
-    generate_summary_report()
+    nist_failure_percentage = finalize_nist_results(all_nist_results)
+    dh_failure_percentage = finalize_dieharder_results(
+        dieharder_settings)
+    bsi_failure_percentage = finalize_bsi_fips_results(all_bsi_results)
+    fips_failure_percentage = finalize_bsi_fips_results(all_fips_results)
+    failure_percentage = [
+        *bsi_failure_percentage,
+        *fips_failure_percentage,
+        *nist_failure_percentage,
+        *dh_failure_percentage
+    ]
+    for percentage in failure_percentage:
+        if percentage > 0.04:
+            print("Generator failed")
+            return
+    print("Generator passed")
 
 
 if __name__ == "__main__":
