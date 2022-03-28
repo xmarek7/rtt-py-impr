@@ -6,7 +6,7 @@ from subprocess import Popen, PIPE
 from results.nist import NistResult, NistResultFactory
 from tools.misc import nist_test_ids_to_param
 from settings.nist import NistSettings
-from settings.general import BinariesSettings, ExecutionSettings, FileStorageSettings, GeneralSettings, LoggerSettings
+from settings.general import GeneralSettings
 
 
 class NistExecution:
@@ -20,6 +20,7 @@ class NistExecution:
         self.test_ids_param = nist_test_ids_to_param(
             self.battery_settings.test_ids)
         self.app_logger = logging.getLogger()
+        self.log_prefix = "[NIST STS]"
         self.nist_templates_dir = os.path.join(
             os.path.dirname(os.path.abspath(__file__)), "nist_templates")
 
@@ -56,29 +57,24 @@ class NistExecution:
                 cwd=temp_cwd)
             error_code = test_execution.wait(
                 timeout=self.execution_settings.test_timeout_seconds)
-            stdout = test_execution.stdout.read()
+            stdout = test_execution.stdout.read().decode("utf-8")
             if error_code != 1:  # assess returns 1 on success
                 self.app_logger.error(
-                    f"NIST-STS execution for file {sequence_path} failed."
-                    f" STDOUT:\n{str(stdout)}\n")
+                    f"{self.log_prefix} - Execution for file {sequence_path} failed."
+                    f" STDOUT:\n{stdout}")
             else:
-                final_analysis_location = os.path.join(
+                final_analysis_file = os.path.join(
                     temp_cwd, "experiments", "AlgorithmTesting",
                     "finalAnalysisReport.txt")
-                with open(final_analysis_location, "r") as final_analysis:
+                with open(final_analysis_file, "r") as final_analysis:
                     execution_result = NistResultFactory.make(final_analysis.read())
         return execution_result
 
     def prepare_output_dirs(self, temp_dir: str):
-        log_dir = self.logger_settings.nist_sts_dir
-        if not os.path.isdir(log_dir):
-            self.app_logger.info(
-                f"Logging directory {log_dir} does not exist. Creating ...")
-            os.makedirs(log_dir)
         res_dir = self.storage_settings.nist_sts_dir
         if not os.path.isdir(res_dir):
             self.app_logger.info(
-                f"Output directory {res_dir} does not exist. Creating ...")
+                f"{self.log_prefix} - Output directory {res_dir} does not exist. Creating ...")
             os.makedirs(res_dir)
         test_result_dirs = [
             "Frequency",
@@ -101,6 +97,4 @@ class NistExecution:
             dir_path = os.path.join(
                 temp_dir,
                 "experiments", "AlgorithmTesting", test_result_dir)
-            self.app_logger.info(
-                f"NIST-STS creating result directory {dir_path}")
-            os.makedirs(dir_path, exist_ok=True)
+            os.makedirs(dir_path)

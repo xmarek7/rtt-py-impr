@@ -1,7 +1,7 @@
 import logging
 from subprocess import Popen, PIPE
 from settings.testu01 import TestU01Settings
-from settings.general import BinariesSettings, ExecutionSettings, FileStorageSettings, GeneralSettings, LoggerSettings
+from settings.general import GeneralSettings
 from results.testu01 import TestU01Result, TestU01ResultFactory
 
 
@@ -14,6 +14,7 @@ class TestU01Execution:
         self.storage_settings = general_settings.storage
         self.logger_settings = general_settings.logger
         self.app_logger = logging.getLogger()
+        self.log_prefix = f"[TestU01-{self.battery_settings.subbattery}]"
 
     # example commands:
     #   testu01 -m small_crush -t 2 -i bsi_input.rnd
@@ -40,6 +41,8 @@ class TestU01Execution:
                     cli_args.extend(["--bit_s", str(variant.bit_s)])
                 if variant.bit_w is not None:
                     cli_args.extend(["--bit_w", str(variant.bit_w)])
+                self.app_logger.info(
+                    f"{self.log_prefix} - Test execution arguments: {cli_args}")
                 test_execution = Popen(cli_args, stdout=PIPE, stderr=PIPE)
                 error_code = test_execution.wait(
                     timeout=self.execution_settings.test_timeout_seconds)
@@ -47,7 +50,7 @@ class TestU01Execution:
                 if error_code != 0:
                     stderr = test_execution.stderr.read().decode("utf-8")
                     self.app_logger.error(
-                        "TestU01 failed\nSTDOUT:\n{stdout}"
+                        f"{self.log_prefix} - Execution failed. Arguments were: {cli_args}\nSTDOUT:\n{stdout}"
                         f"\nSTDERR:\n{stderr}")
                 else:
                     variant_result = TestU01ResultFactory.make_result(stdout)

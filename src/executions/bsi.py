@@ -3,7 +3,7 @@ import os
 import logging
 from subprocess import Popen, PIPE
 from settings.bsi import BsiSettings
-from settings.general import ExecutionSettings, BinariesSettings, FileStorageSettings, GeneralSettings, LoggerSettings
+from settings.general import GeneralSettings
 from results.bsi import BsiResult
 
 
@@ -15,6 +15,7 @@ class BsiExecution:
         self.storage_settings = general_settings.storage
         self.logger_settings = general_settings.logger
         self.app_logger = logging.getLogger()
+        self.log_prefix = "[BSI]"
 
     def execute_for_sequence(self, sequence_path) -> 'list[BsiResult]':
         self.prepare_output_dirs()
@@ -22,7 +23,8 @@ class BsiExecution:
         output_filename = str(self.logger_settings.TIMESTAMP) + "_" + \
             os.path.splitext(os.path.basename(sequence_path))[0] + ".json"
         out_file = os.path.join(self.storage_settings.bsi_dir, output_filename)
-        self.app_logger.info(f"BSI results will be saved to {out_file}")
+        self.app_logger.info(
+            f"{self.log_prefix} - Results will be saved to {out_file}")
         process_args = [self.binaries_settings.bsi, "--input_file",
                         sequence_path, "--output_file", out_file]
         process_args.extend(self.get_skip_test_args())
@@ -41,7 +43,7 @@ class BsiExecution:
         if exit_code != 0:
             stderr = test_execution.stderr.read().decode("utf-8")
             self.app_logger.info(
-                f"BSI execution for file {sequence_path} failed. STDOUT:\n{stdout}\nSTDERR:\n{stderr}")
+                f"{self.log_prefix} - Execution for file {sequence_path} failed. STDOUT:\n{stdout}\nSTDERR:\n{stderr}")
         else:
             output_as_json = json.loads(stdout)
             for test_result in output_as_json["tests"]:
@@ -50,6 +52,8 @@ class BsiExecution:
                     test_result["error"],
                     test_result.get("num_runs"),
                     test_result.get("num_failures")))
+            self.app_logger.info(
+                f"{self.log_prefix} - Execution for file {sequence_path} was successful.")
         return execution_result
 
     def get_skip_test_args(self) -> list:
@@ -76,13 +80,8 @@ class BsiExecution:
         return skip_args
 
     def prepare_output_dirs(self):
-        log_dir = self.logger_settings.bsi_dir
-        if not os.path.isdir(self.logger_settings.bsi_dir):
-            self.app_logger.info(
-                f"Logging directory {log_dir} does not exist. Creating ...")
-            os.makedirs(log_dir)
         res_dir = self.storage_settings.bsi_dir
         if not os.path.isdir(res_dir):
             self.app_logger.info(
-                f"Output directory {res_dir} does not exist. Creating ...")
+                f"{self.log_prefix} - Creating output directory {res_dir}.")
             os.makedirs(res_dir)

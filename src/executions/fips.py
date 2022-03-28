@@ -2,7 +2,7 @@ import json
 import logging
 import os
 from subprocess import Popen, PIPE
-from settings.general import ExecutionSettings, BinariesSettings, FileStorageSettings, GeneralSettings, LoggerSettings
+from settings.general import GeneralSettings
 from results.fips import FipsResult
 
 
@@ -13,6 +13,7 @@ class FipsExecution:
         self.storage_settings = general_settings.storage
         self.logger_settings = general_settings.logger
         self.app_logger = logging.getLogger()
+        self.log_prefix = "[FIPS]"
 
     def execute_for_sequence(self, sequence_path) -> 'list[FipsResult]':
         self.prepare_output_dirs()
@@ -23,7 +24,7 @@ class FipsExecution:
         out_file = os.path.join(
             self.storage_settings.fips_dir, output_filename)
         self.app_logger.info(
-            f"FIPS results will be saved to {out_file}")
+            f"{self.log_prefix} - Results will be saved to {out_file}")
         test_execution = Popen([
             self.binaries_settings.fips,
             "--input_file",
@@ -38,8 +39,7 @@ class FipsExecution:
         if exit_code != 0:
             stderr = test_execution.stderr.read().decode("utf-8")
             self.app_logger.error(
-                f"FIPS execution for file {sequence_path} failed. "
-                f"STDOUT:\n{stdout}\nSTDERR:\n{stderr}")
+                f"{self.log_prefix} - Execution for file {sequence_path} failed. STDOUT:\n{stdout}\nSTDERR:\n{stderr}")
         else:
             output_as_json = json.loads(stdout)
             execution_accepted: bool = output_as_json["accepted"]
@@ -52,13 +52,8 @@ class FipsExecution:
         return execution_result
 
     def prepare_output_dirs(self):
-        log_dir = self.logger_settings.fips_dir
-        if not os.path.isdir(log_dir):
-            self.app_logger.info(
-                f"Logging directory {log_dir} does not exist. Creating ...")
-            os.makedirs(log_dir)
         res_dir = self.storage_settings.fips_dir
         if not os.path.isdir(res_dir):
             self.app_logger.info(
-                f"Output directory {res_dir} does not exist. Creating ...")
+                f"{self.log_prefix} - Creating output directory {res_dir}.")
             os.makedirs(res_dir)

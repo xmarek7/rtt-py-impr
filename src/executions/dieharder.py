@@ -2,7 +2,7 @@ import logging
 import os
 from subprocess import Popen, PIPE
 from settings.dieharder import DieharderSettings
-from settings.general import BinariesSettings, ExecutionSettings, FileStorageSettings, GeneralSettings, LoggerSettings
+from settings.general import GeneralSettings
 from results.dieharder import DieharderResult
 
 
@@ -16,12 +16,13 @@ class DieharderExecution:
         self.storage_settings = general_settings.storage
         self.logger_settings = general_settings.logger
         self.app_logger = logging.getLogger()
+        self.log_prefix = "[DieHarder]"
 
     # "dieharder -p 24 -d 101 -D 66047 -g 201
     #     -f bsi_input.rnd"
     def execute_for_sequence(self, sequence_path: str) -> 'list[DieharderResult]':
         self.prepare_output_dirs()
-        result_for_sequence: list[DieharderResult] = []
+        execution_result: list[DieharderResult] = []
         # indexing instead of range-based loop is needed
         # because we are going to modify values
         for i in range(len(self.battery_settings.per_test_config)):
@@ -46,42 +47,43 @@ class DieharderExecution:
                     # file to be tested
                     "-f", sequence_path
                 ]
+                self.app_logger.info(
+                    f"{self.log_prefix} - Test execution arguments: {cli_args}")
                 test_execution = Popen(
                     cli_args, stdout=PIPE, stderr=PIPE)
                 error_code = test_execution.wait(
                     timeout=self.execution_settings.test_timeout_seconds)
-                # some test results contain multiple p-values
-                # for example, the following output
-                # test_a|0|1|2|0.3
-                # test_a|1|2|3|0.4
-                # test_a|2|3|4|0.5
-                # will be parsed as:
-                # [ DieharderResult{name: test_a, ntuple: 0, tsamples: 1, psamples: 2, p-value: 0.3}
-                #   DieharderResult{name: test_a, ntuple: 1, tsamples: 2, psamples: 3, p-value: 0.4}
-                #   DieharderResult{name: test_a, ntuple: 2, tsamples: 3, psamples: 4, p-value: 0.5}]
-                stdout = test_execution.stdout.read().decode("utf-8")
-                output_lines = stdout.split("\n")
-                # iterate through all the output lines
-                for output_line in output_lines:
-                    # if you split one line, you get 2 strings.
-                    # one of them is '', therefore the check is here
-                    if len(output_line) > 0:
-                        line_split = output_line.split("|")
-                        test_name = line_split[0]
-                        ntuple = int(line_split[1])
-                        tsamples = int(line_split[2])
-                        psamples = int(line_split[3])
-                        pvalue = float(line_split[4])
-                        if pvalue > self.alpha:
-                            # this is the reason why we need indexes
-                            self.battery_settings.per_test_config[i].variants[j].passed_variants += 1
-                        self.battery_settings.per_test_config[i].variants[j].executed_variants += 1
-                        result_for_sequence.append(
-                            DieharderResult(self.battery_settings.per_test_config[i].test_id, test_name, ntuple, tsamples, psamples, pvalue))
                 if error_code != 0:
                     self.app_logger.error(
-                        f"Dieharder execution failed. Args: {cli_args}. STDOUT: \n{stdout}")
-        return result_for_sequence
+                        f"{self.log_prefix} - Execution failed. Arguments were:\n{cli_args}.\nSTDOUT: \n{stdout}")
+                else:
+                    # some test results contain multiple p-values
+                    # for example, the following output
+                    # test_a|0|1|2|0.3
+                    # test_a|1|2|3|0.4
+                    # test_a|2|3|4|0.5
+                    # will be parsed as:
+                    # [ DieharderResult{name: test_a, ntuple: 0, tsamples: 1, psamples: 2, p-value: 0.3}
+                    #   DieharderResult{name: test_a, ntuple: 1, tsamples: 2, psamples: 3, p-value: 0.4}
+                    #   DieharderResult{name: test_a, ntuple: 2, tsamples: 3, psamples: 4, p-value: 0.5}]
+                    stdout = test_execution.stdout.read().decode("utf-8")
+                    output_lines = stdout.split("\n")
+                    for output_line in output_lines:
+                        # if you split one line, you get 2 strings.
+                        # one of them is '', therefore the length check is here
+                        if len(output_line) > 0:
+                            line_split = output_line.split("|")
+                            test_name = line_split[0]
+                            ntuple = int(line_split[1])
+                            tsamples = int(line_split[2])
+                            psamples = int(line_split[3])
+                            pvalue = float(line_split[4])
+                            if pvalue > self.alpha:
+                                self.battery_settings.per_test_config[i].variants[j].passed_variants += 1
+                            self.battery_settings.per_test_config[i].variants[j].executed_variants += 1
+                            execution_result.append(
+                                DieharderResult(self.battery_settings.per_test_config[i].test_id, test_name, ntuple, tsamples, psamples, pvalue))
+        return execution_result
 
     def prepare_output_dirs(self):
-        os.makedirs(self.storage_settings.dieharder_dir, exist_ok=True)
+        pass
