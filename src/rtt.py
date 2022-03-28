@@ -58,6 +58,11 @@ def main():
         if not os.path.isfile(file):
             print(f"[ERROR] - File {file} does not exist")
 
+    input_files = [
+        "/ws/rtt-py/tests/assets/rnd/10MB.rnd",
+        "/ws/rtt-statistical-batteries/bsi-src/assets/bsi_input.rnd",
+    ]
+
     # general settings
     try:
         rtt_json = json.loads(
@@ -66,6 +71,13 @@ def main():
         print(f"[ERROR] - Loading {general_config} failed. Reason:\n{err}")
         exit(1)
     general_settings = GeneralSettingsFactory.make_general_settings(rtt_json)
+
+    # html reports
+    html_root_dir = os.path.join(
+        general_settings.storage.dir_prefix, "html", general_settings.logger.TIMESTAMP)
+    os.makedirs(html_root_dir, exist_ok=True)
+    # copy css files
+    copytree("jinja_templates/css", os.path.join(html_root_dir, "css"))
 
     main_logger = init_logging(general_settings.logger)
 
@@ -143,29 +155,52 @@ def main():
             "Tests from TU01-Block-Alphabit battery will not be executed")
         tu01_block_alphabit_settings = None
 
+    configured_batteries = ["fips"]
     # execution initialization
-    bsi_execution = BsiExecution(bsi_settings, general_settings)
+    # FIPS does not require any settings
     fips_execution = FipsExecution(general_settings)
-    nist_execution = NistExecution(nist_settings, general_settings)
-    dieharder_execution = DieharderExecution(
-        dieharder_settings, general_settings)
-    tu01_rabbit_execution = TestU01Execution(
-        tu01_rabbit_settings, general_settings)
-    tu01_alphabit_execution = TestU01Execution(
-        tu01_alphabit_settings, general_settings)
-    tu01_block_alphabit_execution = TestU01Execution(
-        tu01_block_alphabit_settings, general_settings)
+    if bsi_settings:
+        bsi_execution = BsiExecution(
+            bsi_settings, general_settings)
+        configured_batteries.append("bsi")
+    else:
+        bsi_execution = None
 
-    execution_html_dir = os.path.join(
-        general_settings.storage.dir_prefix, "html", general_settings.logger.TIMESTAMP)
-    os.makedirs(execution_html_dir, exist_ok=True)
-    # just to have fancy html
-    copytree("jinja_templates/css", os.path.join(execution_html_dir, "css"))
+    if nist_settings:
+        nist_execution = NistExecution(
+            nist_settings, general_settings)
+        configured_batteries.append("nist")
+    else:
+        nist_execution = None
 
-    configured_batteries = ["bsi", "fips", "nist",
-                            "dieharder", "rabbit", "alphabit", "block_alphabit"]
+    if dieharder_settings:
+        dieharder_execution = DieharderExecution(
+            dieharder_settings, general_settings)
+        configured_batteries.append("dieharder")
+
+    if tu01_rabbit_settings:
+        tu01_rabbit_execution = TestU01Execution(
+            tu01_rabbit_settings, general_settings)
+        configured_batteries.append("rabbit")
+    else:
+        tu01_rabbit_execution = None
+
+    if tu01_alphabit_settings:
+        tu01_alphabit_execution = TestU01Execution(
+            tu01_alphabit_settings, general_settings)
+        configured_batteries.append("alphabit")
+    else:
+        tu01_alphabit_execution = None
+
+    if tu01_block_alphabit_settings:
+        tu01_block_alphabit_execution = TestU01Execution(
+            tu01_block_alphabit_settings, general_settings)
+        configured_batteries.append("block_alphabit")
+    else:
+        tu01_block_alphabit_execution = None
+
     for per_battery_dir in configured_batteries:
-        os.mkdir(os.path.join(execution_html_dir, per_battery_dir))
+        os.mkdir(os.path.join(html_root_dir, per_battery_dir))
 
     bsi_report_files: list[HtmlSummary] = []
     fips_report_files: list[HtmlSummary] = []
@@ -179,10 +214,6 @@ def main():
     all_fips_results: list[list[FipsResult]] = []
     all_nist_results: list[list[NistResult]] = []
 
-    input_files = [
-        "/ws/rtt-py/tests/assets/rnd/10MB.rnd",
-        "/ws/rtt-statistical-batteries/bsi-src/assets/bsi_input.rnd",
-    ]
     for input_file in input_files:
         input_file_basename = os.path.basename(input_file)
         html_result_file = input_file_basename + ".html"
@@ -190,83 +221,83 @@ def main():
         bsi_results = bsi_execution.execute_for_sequence(input_file)
         all_bsi_results.append(bsi_results)
         bsi_report_file = os.path.join(
-            execution_html_dir, "bsi", html_result_file)
+            html_root_dir, "bsi", html_result_file)
         generate_html_with_results(
             "jinja_templates/bsi_template.html.j2",
             {"tested_file": input_file, "list_of_results": bsi_results},
             bsi_report_file)
         bsi_report_files.append(HtmlSummary(
-            bsi_report_file.replace(execution_html_dir + "/", ""), input_file))
+            bsi_report_file.replace(html_root_dir + "/", ""), input_file))
         # fips exec
         fips_results = fips_execution.execute_for_sequence(input_file)
         all_fips_results.append(fips_results)
         fips_bat_accepted = fips_results[0].battery_accepted if len(
             fips_results) > 0 else False
         fips_report_file = os.path.join(
-            execution_html_dir, "fips", html_result_file)
+            html_root_dir, "fips", html_result_file)
         generate_html_with_results(
             "jinja_templates/fips_template.html.j2",
             {"tested_file": input_file, "battery_accepted": fips_bat_accepted,
                 "list_of_results": fips_results},
             fips_report_file)
         fips_report_files.append(HtmlSummary(
-            fips_report_file.replace(execution_html_dir + "/", ""), input_file))
+            fips_report_file.replace(html_root_dir + "/", ""), input_file))
         # nist exec
         nist_results = nist_execution.execute_for_sequence(input_file)
         all_nist_results.append(nist_results)
         nist_report_file = os.path.join(
-            execution_html_dir, "nist", html_result_file)
+            html_root_dir, "nist", html_result_file)
         generate_html_with_results(
             "jinja_templates/nist_template.html.j2",
             {"tested_file": input_file, "list_of_results": nist_results},
             nist_report_file)
         nist_report_files.append(HtmlSummary(
-            nist_report_file.replace(execution_html_dir + "/", ""), input_file))
+            nist_report_file.replace(html_root_dir + "/", ""), input_file))
         # dieharder exec
         dh_results = dieharder_execution.execute_for_sequence(input_file)
         dh_report_file = os.path.join(
-            execution_html_dir, "dieharder", html_result_file)
+            html_root_dir, "dieharder", html_result_file)
         generate_html_with_results(
             "jinja_templates/dieharder_template.html.j2",
             {"tested_file": input_file, "list_of_results": dh_results},
             dh_report_file)
         dh_report_files.append(HtmlSummary(
-            dh_report_file.replace(execution_html_dir + "/", ""), input_file))
+            dh_report_file.replace(html_root_dir + "/", ""), input_file))
         # rabbit exec
         rabbit_results = tu01_rabbit_execution.execute_for_sequence(input_file)
         rabbit_report_file = os.path.join(
-            execution_html_dir, "rabbit", html_result_file)
+            html_root_dir, "rabbit", html_result_file)
         generate_html_with_results(
             "jinja_templates/testu01_template.html.j2",
             {"tested_file": input_file, "list_of_results": rabbit_results,
                 "subbattery": "rabbit"},
             rabbit_report_file)
         rabbit_report_files.append(HtmlSummary(
-            rabbit_report_file.replace(execution_html_dir + "/", ""), input_file))
+            rabbit_report_file.replace(html_root_dir + "/", ""), input_file))
         # alphabit exec
         alphabit_results = tu01_alphabit_execution.execute_for_sequence(
             input_file)
         alphabit_report_file = os.path.join(
-            execution_html_dir, "alphabit", html_result_file)
+            html_root_dir, "alphabit", html_result_file)
         generate_html_with_results(
             "jinja_templates/testu01_template.html.j2",
             {"tested_file": input_file, "list_of_results": alphabit_results,
                 "subbattery": "alphabit"},
             alphabit_report_file)
         alphabit_report_files.append(HtmlSummary(
-            alphabit_report_file.replace(execution_html_dir + "/", ""), input_file))
+            alphabit_report_file.replace(html_root_dir + "/", ""), input_file))
         # block_alphabit exec
         block_alphabit_results = tu01_block_alphabit_execution.execute_for_sequence(
             input_file)
         block_alphabit_report_file = os.path.join(
-            execution_html_dir, "block_alphabit", html_result_file)
+            html_root_dir, "block_alphabit", html_result_file)
         generate_html_with_results(
             "jinja_templates/testu01_template.html.j2",
             {"tested_file": input_file, "list_of_results": block_alphabit_results,
                 "subbattery": "block_alphabit"},
             block_alphabit_report_file)
         block_alphabit_report_files.append(
-            HtmlSummary(block_alphabit_report_file.replace(execution_html_dir + "/", ""), input_file))
+            HtmlSummary(block_alphabit_report_file.replace(html_root_dir + "/", ""), input_file))
 
     generate_html_with_results("jinja_templates/index.html.j2",
                                {"bsi_files_list": bsi_report_files,
@@ -277,7 +308,7 @@ def main():
                                 "alphabit_files_list": alphabit_report_files,
                                 "block_alphabit_files_list": block_alphabit_report_files,
                                 },
-                               os.path.join(execution_html_dir, "index.html"))
+                               os.path.join(html_root_dir, "index.html"))
     nist_failure_percentage = finalize_nist_results(all_nist_results)
     dh_failure_percentage = finalize_dieharder_results(
         dieharder_settings)
