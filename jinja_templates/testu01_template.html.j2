@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>TU01 - {{ subbattery }} results for {{ tested_file }}</title>
+    <title>TU01 - {{ battery }} results for {{ tested_file }}</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/testu01_styles.css">
 </head>
 <body class="testu01">
-    <h2>TU01 - {{ subbattery }}</h2>
+    <h2>TU01 - {{ battery }}</h2>
     <h3>Input file: {{ tested_file }}</h3>
     {% for res in list_of_results:%}
     <div class="testu01">

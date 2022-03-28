@@ -7,12 +7,16 @@
     <link rel="stylesheet" href="../css/fips_styles.css">
 </head>
 <body class="fips">
-    <h3>Input file: {{ tested_file }}</h3>
-    {% if battery_accepted == False %}
-        <h4 style="color:red;">FIPS battery was REJECTED</h4>
+    <h3 class="fips">Input file: {{ tested_file }}</h3>
+    {% if list_of_results|length > 0 %}
+        {% if list_of_results[0].battery_accepted == False %}
+            <h4 class="fips" style="color:red;">FIPS battery was REJECTED</h4>
+        {% else %}
+            <h4 class="fips" style="color:green;">FIPS battery was ACCEPTED</h4>
+        {% endif %}
     {% else %}
-        <h4 style="color:green;">FIPS battery was ACCEPTED</h4>
-    {% endif %}
+        <h4 class="fips" style="color:black;">FIPS battery NOT EVALUATED</h4>
+    {% endif%}
     {% for res in list_of_results:%}
     <div class="fips">
         <h4 class="fips">Test: {{ res.test_name }}</h4>
