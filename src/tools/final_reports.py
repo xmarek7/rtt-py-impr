@@ -24,8 +24,9 @@ def finalize_nist_results_for_one_test(nist_results: 'list[list[NistResult]]', t
             num_interpretable[i] += 1
     results = []
     for i in range(len(num_passed)):
-        rejected_percentage = 1 - num_passed[i] / num_interpretable[i]
-        results.append(rejected_percentage)
+        if num_interpretable[i]:
+            rejected_percentage = 1 - num_passed[i] / num_interpretable[i]
+            results.append(rejected_percentage)
 
     return results
 
@@ -65,8 +66,9 @@ def finalize_dieharder_results(dieharder_settings: DieharderSettings) -> 'list[f
     failure_percentages: list[float] = []
     for test in dieharder_settings.per_test_config:
         for variant in test.variants:
-            percentage = 1 - variant.passed_variants / variant.executed_variants
-            failure_percentages.append(percentage)
+            if variant.executed_variants > 0:
+                percentage = 1 - variant.passed_variants / variant.executed_variants
+                failure_percentages.append(percentage)
 
     return failure_percentages
 
@@ -90,7 +92,8 @@ def finalize_bsi_fips_results(results: 'list[list]') -> 'list[float]':
         test_idx += 1
     failure_percentage: list[float] = []
     for i in range(len(unique_test_names)):
-        percentage = 1 - passed[i] / evaluated[i]
-        failure_percentage.append(percentage)
+        if evaluated[i] > 0:
+            percentage = 1 - passed[i] / evaluated[i]
+            failure_percentage.append(percentage)
 
     return failure_percentage

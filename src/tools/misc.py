@@ -1,3 +1,5 @@
+import os
+
 def parse_test_ids(test_ids: list) -> list:
     """Helper function for parsing test-ids from JSON
 
@@ -43,3 +45,14 @@ def nist_test_ids_to_param(nist_test_ids: list) -> str:
         else:
             out += '0'
     return out
+
+
+def gather_files(dir: str, extensions: list):
+    files = list()
+    for file in os.listdir(dir):
+        for ext in extensions:
+            if file.endswith(ext):
+                files.append(os.path.join(
+                    dir, file))
+
+    return files
