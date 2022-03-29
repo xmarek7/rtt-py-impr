@@ -29,7 +29,7 @@ def parse_arguments() -> argparse.Namespace:
                        type=str)
 
     # optional battery skip
-    bats = ["bsi", "fips", "nist", "diehard", "tu01", "tu01-smallcrust", "tu01-crush",
+    bats = ["bsi", "fips", "nist", "dieharder", "tu01", "tu01-smallcrust", "tu01-crush",
             "tu01-bigcrush", "tu01-rabbit", "tu01-alphabit", "tu01-blockalphabit"]
     for bat in bats:
         parser.add_argument(f"--no-{bat}",

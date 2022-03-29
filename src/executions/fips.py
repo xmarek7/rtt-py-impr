@@ -49,6 +49,8 @@ class FipsExecution:
                 num_runs = t["num_runs"]
                 execution_result.append(FipsResult(
                     execution_accepted, test_name, num_failures, num_runs))
+            self.app_logger.info(
+                f"{self.log_prefix} - Execution for file {sequence_path} was successful.")
         return execution_result
 
     def prepare_output_dirs(self):
