@@ -22,9 +22,12 @@ FIND_PVALUES_REGEX = re.compile(r"p-value of test\s{23}:\s+\d+\.\d+")
 # we must parse float number representing p-value:
 EXTRACT_PVALUES_REGEX = re.compile(r"p-value of test\s{23}:\s+(\d+\.\d+)")
 
+# test name is typically followed by 'test:' + 'newline' + 47 dashes '-'
+EXTRACT_TEST_NAME = re.compile(r"(^.*) test:\n-{47}")
 
 class TestU01Result:
-    def __init__(self, statistics: str, p_value: float):
+    def __init__(self, test_name, statistics: str, p_value: float):
+        self.test_name = test_name
         self.statistics = statistics
         self.p_value = p_value
 
@@ -58,6 +61,11 @@ class TestU01ResultFactory:
                 match = EXTRACT_STATISTICS_REGEX.search(result)
                 if match:
                     statistics = match.group(0).replace("CPU time used", "")
+                    test_name = EXTRACT_TEST_NAME.match(statistics)
+                    if test_name:
+                        test_name = test_name.group(1)
+                    else:
+                        test_name = "TU01 UNKNOWN TEST"
                     # collect all the lines containing pvals to a list
                     # TODO: decide what to do with other pvalues
                     pval_str = FIND_PVALUES_REGEX.findall(statistics)[-1] # take last
@@ -65,5 +73,5 @@ class TestU01ResultFactory:
                     pval = pval_match.group(1) if pval_match else None
                     if pval:  # no error, appending to return variable
                         results.append(TestU01Result(
-                            statistics, float(pval)))
+                            test_name, statistics, float(pval)))
         return results
