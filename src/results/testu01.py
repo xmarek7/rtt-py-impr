@@ -16,14 +16,34 @@ EXTRACT_STATISTICS_REGEX = re.compile(
 # this only finds all the lines containing p-values
 # lines with p-values look like this:
 # p-value of test<23 spaces(that's why \s{23})>:<some spaces for alignment>0.123
-FIND_PVALUES_REGEX = re.compile(r"p-value of test\s{23}:\s+\d+\.\d+")
+# or (pvalue close to 1)
+# p-value of test<23 spaces(that's why \s{23})>:<some spaces for alignment>1 - 8.9e-5
+# or (pvalue close to 0)
+# p-value of test<23 spaces(that's why \s{23})>:<some spaces for alignment>8.9e-5
+FIND_PVALUES_REGEX = re.compile(r"p-value of test\s{23}:\s+(\d.*)")
 
 # after collecting lines containing p-values
 # we must parse float number representing p-value:
 EXTRACT_PVALUES_REGEX = re.compile(r"p-value of test\s{23}:\s+(\d+\.\d+)")
 
+# sometimes there is a p-value that's really close to 1
+# and once that happens, TestU01 battery interprets the p-value
+# in the following format:
+# 0.999911 -> 1 - 8.9e-5
+# so we need to check if the first regular expression fails
+# and if it does we have to extract the value using this fallback regex:
+EXTRACT_PVALUES_NEAR_1_REGEX = re.compile(
+    r"p-value of test\s{23}:\s+1\s+-\s+(\d+.\d+e-\d+)\s+")
+
+# similarly, if the p-value is close to 0,
+# the same problem happens
+# another fallback regex should handle that for us
+EXTRACT_PVALUES_NEAR_0_REGEX = re.compile(
+    r"p-value of test\s{23}:\s+(\d+.\d+e-\d+)\s+")
+
 # test name is typically followed by 'test:' + 'newline' + 47 dashes '-'
 EXTRACT_TEST_NAME = re.compile(r"(^.*) test:\n-{47}")
+
 
 class TestU01Result:
     def __init__(self, test_name, statistics: str, p_value: float):
@@ -68,10 +88,21 @@ class TestU01ResultFactory:
                         test_name = "TU01 UNKNOWN TEST"
                     # collect all the lines containing pvals to a list
                     # TODO: decide what to do with other pvalues
-                    pval_str = FIND_PVALUES_REGEX.findall(statistics)[-1] # take last
-                    pval_match = EXTRACT_PVALUES_REGEX.match(pval_str)
-                    pval = pval_match.group(1) if pval_match else None
-                    if pval:  # no error, appending to return variable
+                    pval_line = FIND_PVALUES_REGEX.findall(
+                        statistics)[-1]  # take last
+
+                    numeric_pval = None
+                    pval_match = EXTRACT_PVALUES_NEAR_1_REGEX.match(pval_line)
+                    if pval_match:
+                        numeric_pval = 1 - float(pval_match.group(1))
+                    else:
+                        for regex in [EXTRACT_PVALUES_NEAR_0_REGEX, EXTRACT_PVALUES_REGEX]:
+                            pval_match = regex.match(pval_line)
+                            if pval_match:
+                                numeric_pval = float(pval_match.group(1))
+                                break
+
+                    if numeric_pval:  # no error, appending to return variable
                         results.append(TestU01Result(
-                            test_name, statistics, float(pval)))
+                            test_name, statistics, numeric_pval))
         return results
