@@ -20,7 +20,7 @@ EXTRACT_STATISTICS_REGEX = re.compile(
 # p-value of test<23 spaces(that's why \s{23})>:<some spaces for alignment>1 - 8.9e-5
 # or (pvalue close to 0)
 # p-value of test<23 spaces(that's why \s{23})>:<some spaces for alignment>8.9e-5
-FIND_PVALUES_REGEX = re.compile(r"p-value of test\s{23}:\s+(\d.*)")
+FIND_PVALUES_REGEX = re.compile(r"p-value of test\s{23}:\s+\d.*")
 
 # after collecting lines containing p-values
 # we must parse float number representing p-value:
