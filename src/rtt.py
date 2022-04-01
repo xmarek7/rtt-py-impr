@@ -17,6 +17,7 @@ from executions.nist import NistExecution
 from executions.testu01 import TestU01Execution
 from executions.dieharder import DieharderExecution
 
+from tools.csv_utils import generate_csv_report
 from tools.html_reports import generate_html_with_results, get_html_template_name
 from tools.final_reports import finalize_bsi_fips_results, finalize_nist_results, finalize_dieharder_results
 from tools.misc import gather_files
@@ -269,6 +270,7 @@ def main(args: argparse.Namespace):
     for per_battery_dir in configured_batteries:
         os.mkdir(os.path.join(html_root_dir, per_battery_dir))
 
+    full_report = dict()
     for input_file in input_files:
         main_logger.info(f"Current file being processed: {input_file}")
         html_result_file = os.path.basename(input_file) + ".html"
@@ -277,6 +279,10 @@ def main(args: argparse.Namespace):
             results = run_instance[battery]["execution_class"].execute_for_sequence(
                 input_file)
             run_instance[battery]["results"].append(results)
+            if input_file in full_report:
+                full_report[input_file].update({battery: results})
+            else:
+                full_report[input_file] = {battery: results}
             html_file = os.path.join(
                 html_root_dir, battery, html_result_file)
             generate_html_with_results(
@@ -296,6 +302,17 @@ def main(args: argparse.Namespace):
     generate_html_with_results("index.html.j2",
                                index_html_value_dict,
                                os.path.join(html_root_dir, "index.html"))
+
+    # generate csv
+    df = generate_csv_report(input_files, configured_batteries, full_report)
+
+    # save csv to file
+    csv_file = os.path.join(
+        general_settings.storage.dir_prefix, "csv", general_settings.logger.TIMESTAMP, "report.csv")
+    os.makedirs(os.path.dirname(csv_file))
+
+    main_logger.info(f"Saving report as CSV into: {csv_file}")
+    df.to_csv(csv_file)
 
     decision_threshold = 0.04
     generator_rejected = False
