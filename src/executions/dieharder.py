@@ -23,10 +23,8 @@ class DieharderExecution:
     def execute_for_sequence(self, sequence_path: str) -> 'list[DieharderResult]':
         self.prepare_output_dirs()
         execution_result: list[DieharderResult] = []
-        # indexing instead of range-based loop is needed
-        # because we are going to modify values
-        for i in range(len(self.battery_settings.per_test_config)):
-            for j in range(len(self.battery_settings.per_test_config[i].variants)):
+        for test in self.battery_settings.per_test_config:
+            for variant in test.variants:
                 cli_args = [
                     self.binaries_settings.dieharder,
                     # -D 33016 parameter causes dieharder to return results in the following format:
@@ -37,13 +35,11 @@ class DieharderExecution:
                     # 201 in dieharder means file_input_raw (for more info run ./dieharder -g 502)
                     "-g", "201",
                     # unique test id (see dieharder help for more info)
-                    "-d", str(
-                        self.battery_settings.per_test_config[i].test_id),
+                    "-d", str(test.test_id),
                     # psamples parameter
-                    "-p", str(
-                        self.battery_settings.per_test_config[i].variants[j].psamples),
+                    "-p", str(variant.psamples),
                     # additional arguments if specified in .json file
-                    *self.battery_settings.per_test_config[i].variants[j].arguments,
+                    *variant.arguments,
                     # file to be tested
                     "-f", sequence_path
                 ]
@@ -78,11 +74,8 @@ class DieharderExecution:
                             tsamples = int(line_split[2])
                             psamples = int(line_split[3])
                             pvalue = float(line_split[4])
-                            if pvalue > self.alpha:
-                                self.battery_settings.per_test_config[i].variants[j].passed_variants += 1
-                            self.battery_settings.per_test_config[i].variants[j].executed_variants += 1
                             execution_result.append(
-                                DieharderResult(self.battery_settings.per_test_config[i].test_id, test_name, ntuple, tsamples, psamples, pvalue))
+                                DieharderResult(test.test_id, test_name, ntuple, tsamples, psamples, pvalue))
         return execution_result
 
     def prepare_output_dirs(self):

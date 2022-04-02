@@ -5,9 +5,6 @@ class DieharderVariant:
     def __init__(self, arguments: 'list[str]', psamples):
         self.arguments = arguments
         self.psamples = psamples
-        # incremented by execution class:
-        self.passed_variants = 0
-        self.executed_variants = 0
 
 
 class DieharderTestIdSetting:

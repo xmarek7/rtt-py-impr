@@ -19,7 +19,6 @@ from executions.dieharder import DieharderExecution
 
 from tools.csv_utils import generate_csv_report
 from tools.html_reports import generate_html_with_results, get_html_template_name
-from tools.final_reports import finalize_bsi_fips_results, finalize_nist_results, finalize_dieharder_results
 from tools.misc import gather_files
 from program_arguments import parse_arguments
 
@@ -57,6 +56,11 @@ def init_logging(settings: LoggerSettings) -> logging.Logger:
 
 def main(args: argparse.Namespace):
     THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+
+    # TODO: move rejection_threshold and alpha to program arguments
+    decision_threshold = 0.04
+    alpha = 0.01
+
     general_settings = args.general_settings
     test_settings = args.test_settings
     for file in [general_settings, test_settings]:
@@ -303,71 +307,20 @@ def main(args: argparse.Namespace):
                                index_html_value_dict,
                                os.path.join(html_root_dir, "index.html"))
 
-    # generate csv
-    df = generate_csv_report(input_files, configured_batteries, full_report)
-
     # save csv to file
     csv_file = os.path.join(
         general_settings.storage.dir_prefix, "csv", general_settings.logger.TIMESTAMP, "report.csv")
     os.makedirs(os.path.dirname(csv_file))
+    main_logger.info(f"Saving CSV report into: {csv_file}")
 
-    main_logger.info(f"Saving report as CSV into: {csv_file}")
+    # generate csv
+    df = generate_csv_report(
+        input_files, configured_batteries, full_report, alpha, decision_threshold)
+
+    # save csv to file
     df.to_csv(csv_file)
-
-    decision_threshold = 0.04
-    generator_rejected = False
-    generator_assessed = False
-    if "fips" in configured_batteries:
-        fips_failure_percentage = finalize_bsi_fips_results(
-            run_instance["fips"]["results"])
-        for percentage in fips_failure_percentage:
-            if percentage > decision_threshold:
-                generator_rejected = True
-                main_logger.warn(
-                    "[FIPS] - Generator was rejected by the battery.")
-                break
-        generator_assessed = True
-    if "bsi" in configured_batteries:
-        bsi_failure_percentage = finalize_bsi_fips_results(
-            run_instance["bsi"]["results"])
-        for percentage in bsi_failure_percentage:
-            if percentage > decision_threshold:
-                generator_rejected = True
-                main_logger.warn(
-                    "[BSI] - Generator was rejected by the battery.")
-                break
-        generator_assessed = True
-    if "nist" in configured_batteries:
-        nist_failure_percentage = finalize_nist_results(
-            run_instance["nist"]["results"])
-        for percentage in nist_failure_percentage:
-            if percentage > decision_threshold:
-                generator_rejected = True
-                main_logger.warn(
-                    "[NIST] - Generator was rejected by the battery.")
-                break
-        generator_assessed = True
-    if "dieharder" in configured_batteries:
-        dh_failure_percentage = finalize_dieharder_results(dieharder_settings)
-        for percentage in dh_failure_percentage:
-            if percentage > decision_threshold:
-                generator_rejected = True
-                main_logger.warn(
-                    "[DieHarder] - Generator was rejected by the battery.")
-                break
-        generator_assessed = True
-
-    if not generator_assessed:
-        main_logger.warn("Generator could not be assessed")
-        return
-
-    if generator_rejected:
-        main_logger.warn("Generator rejected")
-        print("[RESULT] - Generator rejected")
-        return
-
-    main_logger.info("Generator accepted")
-    print("[RESULT] - Generator accepted")
+    # save csv as html
+    df.to_html(os.path.join(html_root_dir, "results.html"))
 
 
 if __name__ == "__main__":

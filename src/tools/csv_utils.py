@@ -1,10 +1,12 @@
+import logging
+import re
 import pandas as pd
 
 from results.bsi import BsiResult
 from results.fips import FipsResult
 
 
-def generate_csv_report(tested_files: list, batteries: list, report: dict) -> pd.DataFrame:
+def generate_csv_report(tested_files: list, batteries: list, report: dict, alpha: float = 0.01, rejection_threshold: float = 0.04) -> pd.DataFrame:
     df = pd.DataFrame()
 
     # initialize columns from list of tested files
@@ -23,6 +25,25 @@ def generate_csv_report(tested_files: list, batteries: list, report: dict) -> pd
                     df.at[f"{test_result.test_name}_{test_result_idx} ({battery.upper()})", file] = extract_value_from_result(
                         test_result)
                     test_result_idx += 1
+
+    rejection_column = "Failure rate"
+    df.insert(0, rejection_column, None)
+    for i in range(len(df)):
+        test_name = str(df.iloc[i].name)
+        battery = determine_battery(test_name)
+        if battery in ["BSI", "FIPS"]:  # num_failures
+            df.at[test_name, rejection_column] = 1 - \
+                (df.iloc[i, 1:] == 0).sum() / df.iloc[i, 1:].count()
+        else:
+            df.at[test_name, rejection_column] = 1 - \
+                (df.iloc[i, 1:] > alpha).sum() / df.iloc[i, 1:].count()
+
+    main_logger = logging.getLogger()
+    above_rejection_th = (df[rejection_column] > rejection_threshold).sum()
+    if above_rejection_th > 0:
+        main_logger.error(f"[RESULT] - Generator was rejected")
+    else:
+        main_logger.error(f"[RESULT] - Generator was accepted")
 
     return df
 
@@ -53,3 +74,11 @@ def extract_value_from_result(result):
     # rest of the batteries have p-value results
     else:
         return result.p_value
+
+
+def determine_battery(test_name):
+    rgx = re.compile(r".* \((.*)\)$")
+    match = rgx.match(test_name)
+    if match:
+        return match.group(1)
+    return None
