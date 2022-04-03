@@ -1,4 +1,13 @@
 table, th, td {
   border: 1px solid;
   border-collapse: collapse;
+  padding: 10px;
+}
+
+.dataframe tr:nth-child(even) {
+  background-color: lightgray;
+}
+
+.dataframe tr:nth-child(odd) {
+  background-color: white;
 }

@@ -101,6 +101,9 @@ def main(args: argparse.Namespace):
     html_root_dir = os.path.join(
         general_settings.storage.dir_prefix, "html", general_settings.logger.TIMESTAMP)
     os.makedirs(html_root_dir, exist_ok=True)
+    html_result_table_filename = "results.html"
+    html_result_table_file = os.path.join(
+        html_root_dir, html_result_table_filename)
     # copy css files
     copytree(os.path.join(THIS_DIR, "..", "jinja_templates", "css"),
              os.path.join(html_root_dir, "css"))
@@ -298,7 +301,7 @@ def main(args: argparse.Namespace):
                 html_file.replace(html_root_dir + os.path.sep, ""), input_file))
         main_logger.info(f"Done processing file: {input_file}")
 
-    index_html_value_dict = dict()
+    index_html_value_dict = {"results_html_file": html_result_table_filename}
     for battery in configured_batteries:
         index_html_value_dict.update(
             {f"{battery}_files_list": run_instance[battery]["html_summary"]})
@@ -320,7 +323,10 @@ def main(args: argparse.Namespace):
     # save csv to file
     df.to_csv(csv_file)
     # save csv as html
-    df.to_html(os.path.join(html_root_dir, "results.html"))
+    html_results_table = df.to_html()
+    generate_html_with_results("results.html.j2",
+                               {"results_table": html_results_table},
+                               html_result_table_file)
 
 
 if __name__ == "__main__":
