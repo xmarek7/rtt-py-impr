@@ -317,16 +317,24 @@ def main(args: argparse.Namespace):
     main_logger.info(f"Saving CSV report into: {csv_file}")
 
     # generate csv
-    df = generate_csv_report(
-        input_files, configured_batteries, full_report, alpha, decision_threshold)
-
-    # save csv to file
-    df.to_csv(csv_file)
+    try:
+        df = generate_csv_report(
+            input_files, configured_batteries, full_report, alpha, decision_threshold)
+        df.to_csv(csv_file)
+    except Exception as err:
+        main_logger.error(f"Failed to generate CSV report. Reason: {err}")
+        sys.exit(1)
+    
     # save csv as html
-    html_results_table = df.to_html()
-    generate_html_with_results("results.html.j2",
-                               {"results_table": html_results_table},
-                               html_result_table_file)
+    try:
+        html_results_table = df.to_html()
+        generate_html_with_results("results.html.j2",
+                                   {"results_table": html_results_table},
+                                   html_result_table_file)
+    except Exception as err:
+        main_logger.error(
+            f"Failed to generate HTML from DataFrame. Reason: {err}")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
