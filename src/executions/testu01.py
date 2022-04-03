@@ -8,6 +8,13 @@ from results.testu01 import TestU01Result, TestU01ResultFactory
 class TestU01Execution:
     def __init__(self, testu01_settings: TestU01Settings,
                  general_settings: GeneralSettings):
+        """Initialize a class responsible for execution of tests from TestU01 battery.
+        This class is shared among [small, big]-crush, rabbit, (block)alphabit families of tests.
+
+        Args:
+            testu01_settings (TestU01Settings): Object containing TestU01-related settings
+            general_settings (GeneralSettings): Object containing general settings
+        """
         self.battery_settings = testu01_settings
         self.binaries_settings = general_settings.binaries
         self.execution_settings = general_settings.execution
@@ -24,6 +31,14 @@ class TestU01Execution:
     #   testu01 -m alphabit -t 8 -i bsi_input.rnd --bit_nb 10000000 --bit_r 0 --bit_s 32
     #   testu01 -m block_alphabit -t 9 -i bsi_input.rnd --bit_nb 10000000 --bit_r 0 --bit_s 32 --bit_w 8
     def execute_for_sequence(self, sequence_path: str) -> 'list[TestU01Result]':
+        """Execute one TestU01 family of tests over a random sequence.
+
+        Args:
+            sequence_path (str): Path to a binary file containing random sequence
+
+        Returns:
+            list[TestU01Result]: Results of performed tests
+        """
         execution_result: list[TestU01Result] = []
         for test in self.battery_settings.per_test_id_settings:
             for variant in test.variants:

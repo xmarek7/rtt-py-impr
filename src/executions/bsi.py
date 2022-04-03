@@ -9,6 +9,12 @@ from results.bsi import BsiResult
 
 class BsiExecution:
     def __init__(self, bsi_settings: BsiSettings, general_settings: GeneralSettings):
+        """Initialize a class responsible for execution of tests from BSI battery
+
+        Args:
+            bsi_settings (BsiSettings): Object containing BSI-related settings
+            general_settings (GeneralSettings): Object containing general settings
+        """
         self.battery_settings = bsi_settings
         self.binaries_settings = general_settings.binaries
         self.execution_settings = general_settings.execution
@@ -17,7 +23,15 @@ class BsiExecution:
         self.app_logger = logging.getLogger()
         self.log_prefix = "[BSI]"
 
-    def execute_for_sequence(self, sequence_path) -> 'list[BsiResult]':
+    def execute_for_sequence(self, sequence_path: str) -> 'list[BsiResult]':
+        """Execute BSI tests over a random sequence.
+
+        Args:
+            sequence_path (str): Path to a binary file containing random sequence
+
+        Returns:
+            list[BsiResult]: Results of performed tests
+        """
         self.prepare_output_dirs()
         execution_result: list[BsiResult] = []
         output_filename = str(self.logger_settings.TIMESTAMP) + "_" + \
@@ -57,6 +71,12 @@ class BsiExecution:
         return execution_result
 
     def get_skip_test_args(self) -> list:
+        """Analyze configured test IDs and return list of arguments
+        that are going to make BSI binary skip tests that were not included in IDs
+
+        Returns:
+            list: '--skip-{test}'-like arguments
+        """
         skip_args = list()
         ids = self.battery_settings.test_ids
         if 0 not in ids:
@@ -80,6 +100,8 @@ class BsiExecution:
         return skip_args
 
     def prepare_output_dirs(self):
+        """Prepares a directory structure for run.
+        """
         res_dir = self.storage_settings.bsi_dir
         if not os.path.isdir(res_dir):
             self.app_logger.info(

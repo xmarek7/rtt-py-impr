@@ -8,6 +8,13 @@ from results.fips import FipsResult
 
 class FipsExecution:
     def __init__(self, general_settings: GeneralSettings):
+        """Initialize a class responsible for execution of tests from FIPS battery.
+        Unlike other classes, this class does not require object containing battery-related settings.
+        FIPS does not offer much to configure.
+
+        Args:
+            general_settings (GeneralSettings): Object containing general settings
+        """
         self.binaries_settings = general_settings.binaries
         self.execution_settings = general_settings.execution
         self.storage_settings = general_settings.storage
@@ -15,7 +22,15 @@ class FipsExecution:
         self.app_logger = logging.getLogger()
         self.log_prefix = "[FIPS]"
 
-    def execute_for_sequence(self, sequence_path) -> 'list[FipsResult]':
+    def execute_for_sequence(self, sequence_path: str) -> 'list[FipsResult]':
+        """Execute BSI tests over a random sequence.
+
+        Args:
+            sequence_path (str): Path to a binary file containing random sequence
+
+        Returns:
+            list[FipsResult]: Results of performed tests
+        """
         self.prepare_output_dirs()
         execution_result: list[FipsResult] = []
         output_filename = self.logger_settings.TIMESTAMP + "_" + \
@@ -54,6 +69,8 @@ class FipsExecution:
         return execution_result
 
     def prepare_output_dirs(self):
+        """Prepares a directory structure for run.
+        """
         res_dir = self.storage_settings.fips_dir
         if not os.path.isdir(res_dir):
             self.app_logger.info(

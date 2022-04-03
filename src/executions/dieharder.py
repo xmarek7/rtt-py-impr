@@ -9,7 +9,12 @@ from results.dieharder import DieharderResult
 class DieharderExecution:
     def __init__(self, dieharder_settings: DieharderSettings,
                  general_settings: GeneralSettings):
-        self.alpha = 0.01
+        """Initialize a class responsible for executiion of tests from BSI battery
+
+        Args:
+            dieharder_settings (DieharderSettings): Object containing DieHarder-related settings
+            general_settings (GeneralSettings): Object containing general settings
+        """
         self.battery_settings = dieharder_settings
         self.binaries_settings = general_settings.binaries
         self.execution_settings = general_settings.execution
@@ -21,6 +26,14 @@ class DieharderExecution:
     # "dieharder -p 24 -d 101 -D 66047 -g 201
     #     -f bsi_input.rnd"
     def execute_for_sequence(self, sequence_path: str) -> 'list[DieharderResult]':
+        """Execute DieHarder tests over a random sequence.
+
+        Args:
+            sequence_path (str): Path to a binary file containing random sequence
+
+        Returns:
+            list[DieharderResult]: Results of performed tests
+        """
         self.prepare_output_dirs()
         execution_result: list[DieharderResult] = []
         for test in self.battery_settings.per_test_config:
@@ -79,4 +92,6 @@ class DieharderExecution:
         return execution_result
 
     def prepare_output_dirs(self):
+        """Prepares a directory structure for run.
+        """
         pass

@@ -12,6 +12,12 @@ from settings.general import GeneralSettings
 class NistExecution:
     def __init__(self, nist_settings: NistSettings,
                  general_settings: GeneralSettings):
+        """Initialize a class responsible for execution of tests from BSI battery
+
+        Args:
+            nist_settings (NistSettings): Object containing NIST-related settings
+            general_settings (GeneralSettings): Object containing general settings
+        """
         self.battery_settings = nist_settings
         self.binaries_settings = general_settings.binaries
         self.execution_settings = general_settings.execution
@@ -21,6 +27,9 @@ class NistExecution:
             self.battery_settings.test_ids)
         self.app_logger = logging.getLogger()
         self.log_prefix = "[NIST STS]"
+        # some tests require templates (see src/nist_templates directory)
+        # therefore we need to provide a full path to those templates
+        # this full path is then passed as '-templatesdir' argument to assess
         self.nist_templates_dir = os.path.join(
             os.path.dirname(os.path.abspath(__file__)), "nist_templates")
 
@@ -33,6 +42,14 @@ class NistExecution:
     #   --defaultpar
     #   --binary
     def execute_for_sequence(self, sequence_path: str) -> 'list[NistResult]':
+        """Execute NIST tests over a random sequence.
+
+        Args:
+            sequence_path (str): Path to a binary file containing random sequence
+
+        Returns:
+            list[NistResult]: Results of performed tests
+        """
         # stepping into temp directory to ensure no data race
         # among multiple executions (i.e. async execution)
         execution_result = []
@@ -71,11 +88,22 @@ class NistExecution:
         return execution_result
 
     def prepare_output_dirs(self, temp_dir: str):
+        """Prepares a directory structure for run.
+        We need to specify the 'temp_dir' parameter since NIST battery
+        writes all of its results into files. The files are being saved in certain
+        directory structure so for each execution we create a temporary directory,
+        create the desired directory structure and after the execution is done,
+        the temp directory is deleted.
+
+        Args:
+            temp_dir (str): Path to a temp directory in which NIST will be executed
+        """
         res_dir = self.storage_settings.nist_sts_dir
         if not os.path.isdir(res_dir):
             self.app_logger.info(
                 f"{self.log_prefix} - Output directory {res_dir} does not exist. Creating ...")
             os.makedirs(res_dir)
+        # list of all tests, they must have own subdirectory
         test_result_dirs = [
             "Frequency",
             "BlockFrequency",
@@ -94,6 +122,7 @@ class NistExecution:
             "RandomExcursionsVariant",
         ]
         for test_result_dir in test_result_dirs:
+            # AlgorithmTesting - this directory name is used when testing a binary file
             dir_path = os.path.join(
                 temp_dir,
                 "experiments", "AlgorithmTesting", test_result_dir)
