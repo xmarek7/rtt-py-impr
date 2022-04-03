@@ -1,9 +1,9 @@
-div.fips:nth-child(odd) {
-  background-color: lightgray;
+div.fips-failed {
+  background-color: lightcoral;
 }
 
-div.fips:nth-child(even) {
-  background-color: silver;
+div.fips-passed {
+  background-color: lightgray;
 }
 
 th.fips {

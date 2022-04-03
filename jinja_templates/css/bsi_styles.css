@@ -1,9 +1,13 @@
-div.bsi:nth-child(odd) {
-  background-color: lightgray;
+div.bsi-error {
+  background-color: red;
 }
 
-div.bsi:nth-child(even) {
-  background-color: lightblue;
+div.bsi-failed {
+  background-color: lightcoral;
+}
+
+div.bsi-passed {
+  background-color: lightgray;
 }
 
 th.bsi {

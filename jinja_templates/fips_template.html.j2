@@ -18,7 +18,11 @@
         <h4 class="fips" style="color:black;">FIPS battery NOT EVALUATED</h4>
     {% endif%}
     {% for res in list_of_results:%}
-    <div class="fips">
+    {% if res.num_failures > 0 %}
+    <div class="fips-failed">
+    {% else %}
+    <div class="fips-passed">
+    {% endif %}
         <h4 class="fips">Test: {{ res.test_name }}</h4>
         <table class="fips">
             <tr class="fips">

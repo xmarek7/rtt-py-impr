@@ -9,7 +9,13 @@
 <body class="bsi">
     <h3>Input file: {{ tested_file }}</h3>
     {% for res in list_of_results:%}
-    <div class="bsi">
+    {% if res.has_error %}
+    <div class="bsi-error">
+    {% elif res.num_failures > 0 %}
+    <div class="bsi-failed">
+    {% else %}
+    <div class="bsi-passed">
+    {% endif %}
         <h4 class="bsi">Test: {{ res.test_name }}</h4>
         <table class="bsi">
             <tr class="bsi">
