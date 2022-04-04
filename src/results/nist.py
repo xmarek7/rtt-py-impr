@@ -20,9 +20,11 @@ EXTRACT_ONE_LINE = re.compile(r"^(\d\.\d+)\s+(\d\.\d+)\s+(\S+)\b")
 
 
 class NistResult:
+    """Data structure for storing information about a single NIST test result.
+    This data structure is constructed by its factory object.
+    """
     def __init__(self, test_name: str, p_value: float, proportion: float):
-        """Data structure for storing information about a single NIST test result.
-        This data structure is constructed by its factory object.
+        """Initialize NistResult class
 
         Args:
             test_name (str): Name of a test

@@ -1,10 +1,12 @@
 class FipsResult:
+    """Wrap result of single FIPS test into a class.
+    Since FIPS is a very small battery and is extremely simple,
+    it produces only a number of failures and a number of runs
+    on a particular sequence.
+    """
     def __init__(self, battery_accepted: bool, test_name: str,
                  num_failures: int, num_runs: int):
-        """Wrap result of single FIPS test into a class.
-        Since FIPS is a very small battery and is extremely simple,
-        it produces only a number of failures and a number of runs
-        on a particular sequence.
+        """Initialize FipsResult class
 
         Args:
             battery_accepted (bool): Information about acceptance of a generator by FIPS battery

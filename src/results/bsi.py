@@ -1,9 +1,11 @@
 class BsiResult:
-    def __init__(self, test_name: str, has_error: bool, num_runs: int, num_failures: int):
-        """Wrap result of single BSI test into a class.
+    """Wrap result of single BSI test into a class.
         Each BSI test has a result that says if there was an error
         and if not, number of all runs and number of failed runs are returned
         by the battery.
+    """
+    def __init__(self, test_name: str, has_error: bool, num_runs: int, num_failures: int):
+        """Initialize BsiResult class
 
         Args:
             test_name (str): Name of a test

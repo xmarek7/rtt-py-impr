@@ -1,11 +1,13 @@
 class DieharderResult:
+    """Wrap result of single DieHarder test into a class.
+    The most important attribute is p_value because it is
+    used for overall evaluation and has impact on final decision
+    if generator was accepted or rejected.
+    """
     def __init__(self, test_id: int, test_name: str,
                  ntuples: int, tsamples: int, psamples: int,
                  pvalue: float):
-        """Wrap result of single DieHarder test into a class.
-        The most important attribute is p_value because it is
-        used for overall evaluation and has impact on final decision
-        if generator was accepted or rejected.
+        """Initialize DieharderResult class
 
         Args:
             test_id (int): Internal DieHarder test ID, not used by this codebase

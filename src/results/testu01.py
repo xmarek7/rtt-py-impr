@@ -46,8 +46,10 @@ EXTRACT_TEST_NAME = re.compile(r"(^.*) test:\n-{47}")
 
 
 class TestU01Result:
+    """Wraps result of one of the TestU01 battery tests.
+    """
     def __init__(self, test_name, statistics: str, p_value: float):
-        """Wraps result of one of the TestU01 battery tests.
+        """Initialize TestU01Result class
 
         Args:
             test_name (_type_): Name of a test
