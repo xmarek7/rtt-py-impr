@@ -1,13 +1,14 @@
 import os
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
+# search path is jinja_templates directory's absolute path
 JINJA_SEARCH_PATH = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
     "..", "..", "jinja_templates"
 )
 
+# initialization of jinja environment
 JINJA_ENV = Environment(
-    # loader=FileSystemLoader("."),
     loader=FileSystemLoader(JINJA_SEARCH_PATH),
     autoescape=select_autoescape())
 
@@ -40,38 +41,3 @@ def get_html_template_name(battery_name: str) -> str:
         return "testu01_template.html.j2"
     else:
         return f"{battery_name}_template.html.j2"
-
-
-# example usage:
-# render BSI
-# generate_html_with_results("jinja_templates/bsi_template.html.j2",
-#                 {"tested_file": "some_file.rnd",
-#                 "list_of_results": bsi_results},
-#                 "generated_report_bsi.html")
-
-# render FIPS
-# generate_html_with_results("jinja_templates/fips_template.html.j2",
-#                 {"tested_file": "some_file.rnd",
-#                 "battery_accepted": True,
-#                 "list_of_results": fips_results},
-#                 "generated_report_fips.html")
-
-# render NIST
-# generate_html_with_results("jinja_templates/nist_template.html.j2",
-#                 {"tested_file": "some_file.rnd",
-#                 "list_of_results": nist_results},
-#                 "generated_report_nist.html")
-
-
-# render DieHarder
-# generate_html_with_results("jinja_templates/dieharder_template.html.j2",
-#                 {"tested_file": "some_file.rnd",
-#                 "list_of_results": dieharder_results},
-#                 "generated_report_dh.html")
-
-# render TestU01
-# generate_html_with_results("jinja_templates/testu01_template.html.j2",
-#                 {"tested_file": "some_file.rnd",
-#                  "list_of_results": testu01_results,
-#                  "subbattery": "rabbit"},
-#                 "generated_report_tu01.html")

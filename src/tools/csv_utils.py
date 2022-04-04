@@ -7,6 +7,18 @@ from results.fips import FipsResult
 
 
 def generate_csv_report(tested_files: list, batteries: list, report: dict, alpha: float = 0.01, rejection_threshold: float = 0.04) -> pd.DataFrame:
+    """Generate CSV report from main run report.
+
+    Args:
+        tested_files (list): List of files tested in the run
+        batteries (list): List of configured batteries
+        report (dict): Full report containing test results of all configured batteries
+        alpha (float, optional): Alpha value for p-value threshold. Defaults to 0.01.
+        rejection_threshold (float, optional): If failure percentage is above the threshold, reject generator. Defaults to 0.04.
+
+    Returns:
+        pd.DataFrame: dataframe containing all results and failure percentage of each test
+    """
     df = pd.DataFrame()
 
     # initialize columns from list of tested files
@@ -49,6 +61,16 @@ def generate_csv_report(tested_files: list, batteries: list, report: dict, alpha
 
 
 def get_test_list_of_battery(tested_files: list, battery: str, report: dict) -> set:
+    """For given battery, get all tests that were executed in a run.
+
+    Args:
+        tested_files (list): List of tested files
+        battery (str): Battery name
+        report (dict): Full run report
+
+    Returns:
+        set: Unique test names executed by battery
+    """
     tests = set()
     for file in tested_files:
         for result in report[file][battery]:
@@ -58,6 +80,17 @@ def get_test_list_of_battery(tested_files: list, battery: str, report: dict) -> 
 
 
 def find_test_results_for_file(tested_file: str, test_name: str, report: dict) -> list:
+    """Given test name, this function returns all the test instances of 'test_name' test
+    that were executed for given 'tested_file'
+
+    Args:
+        tested_file (str): File for which tests should be searched
+        test_name (str): Name of a test
+        report (dict): Full run report
+
+    Returns:
+        list: All results of test with name 'test_name' executed for file 'tested_file'
+    """
     test_result = list()
     for battery in report[tested_file].keys():
         for result in report[tested_file][battery]:
@@ -67,7 +100,17 @@ def find_test_results_for_file(tested_file: str, test_name: str, report: dict) -
     return test_result
 
 
-def extract_value_from_result(result):
+def extract_value_from_result(result) -> float:
+    """Decide whether to take number of failed runs or p-values.
+    Only FIPS and BSI have num_failures attributes. Other batteries
+    give p-values as result.
+
+    Args:
+        result (_type_): Result instance
+
+    Returns:
+        float: P-value or number of failed runs
+    """
     # FIPS and BSI results are represented as number of failures
     if isinstance(result, BsiResult) or isinstance(result, FipsResult):
         return result.num_failures
@@ -76,7 +119,17 @@ def extract_value_from_result(result):
         return result.p_value
 
 
-def determine_battery(test_name):
+def determine_battery(test_name: str) -> str:
+    """Extract battery name from test_name. Test names in DataFrame
+    are stored as "{test_name} (battery_name)" so it's easy to extract
+    battery name from test_name with regex.
+
+    Args:
+        test_name (str): Name of a test from dataframe
+
+    Returns:
+        str: Battery name
+    """
     rgx = re.compile(r".* \((.*)\)$")
     match = rgx.match(test_name)
     if match:

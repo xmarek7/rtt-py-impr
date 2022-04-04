@@ -25,7 +25,7 @@ def parse_test_ids(test_ids: list) -> list:
                 out.append(tid)
     except:
         raise RuntimeError(
-            "Check your batteries settings JSON file for default Dieharder test-ids")
+            "Check your batteries settings JSON file for default test-ids")
     return out
 
 
@@ -47,7 +47,18 @@ def nist_test_ids_to_param(nist_test_ids: list) -> str:
     return out
 
 
-def gather_files(dir: str, extensions: list):
+def gather_files(dir: str, extensions: list) -> list:
+    """Given dir parameter, function takes all files in that directory
+    and checks if their extensions are in 'extensions' list. These files
+    are then returned in list.
+
+    Args:
+        dir (str): Directory to be searched
+        extensions (list): File extensions we are interested in (like .rnd or .bin)
+
+    Returns:
+        list: List of files in 'dir' ending with extension in 'extensions' list
+    """
     files = list()
     for file in os.listdir(dir):
         for ext in extensions:
