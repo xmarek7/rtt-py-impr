@@ -47,6 +47,13 @@ EXTRACT_TEST_NAME = re.compile(r"(^.*) test:\n-{47}")
 
 class TestU01Result:
     def __init__(self, test_name, statistics: str, p_value: float):
+        """Wraps result of one of the TestU01 battery tests.
+
+        Args:
+            test_name (_type_): Name of a test
+            statistics (str): Statistics printed to STDOUT by TestU01 battery
+            p_value (float): Parsed p-value from statistics
+        """
         self.test_name = test_name
         self.statistics = statistics
         self.p_value = p_value
@@ -80,11 +87,13 @@ class TestU01ResultFactory:
                 # match statistics of each result output
                 match = EXTRACT_STATISTICS_REGEX.search(result)
                 if match:
+                    # save statistics printed to STDOUT
                     statistics = match.group(0).replace("CPU time used", "")
+                    # parse test name from stdout
                     test_name = EXTRACT_TEST_NAME.match(statistics)
                     if test_name:
                         test_name = test_name.group(1)
-                    else:
+                    else: # some exceptional output was produced
                         test_name = "TU01 UNKNOWN TEST"
                     # collect all the lines containing pvals to a list
                     # TODO: decide what to do with other pvalues
@@ -92,11 +101,18 @@ class TestU01ResultFactory:
                         statistics)[-1]  # take last
 
                     numeric_pval = None
+                    # do not change order of regexes!!!
+                    # try matching the p-value that is close to 1
                     pval_match = EXTRACT_PVALUES_NEAR_1_REGEX.match(pval_line)
                     if pval_match:
+                        # if pvalue is close to 1, we parse only second part of a number:
+                        # for example: 1 - 8.9e-5
+                        # will be parsed only as 8.9e-5
                         numeric_pval = 1 - float(pval_match.group(1))
-                    else:
+                    else: # p-value was not close to 1
                         for regex in [EXTRACT_PVALUES_NEAR_0_REGEX, EXTRACT_PVALUES_REGEX]:
+                            # try matching p-value that is close to 0
+                            # and also a normal p-value, i.e. 0.123
                             pval_match = regex.match(pval_line)
                             if pval_match:
                                 numeric_pval = float(pval_match.group(1))

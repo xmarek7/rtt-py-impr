@@ -21,6 +21,14 @@ EXTRACT_ONE_LINE = re.compile(r"^(\d\.\d+)\s+(\d\.\d+)\s+(\S+)\b")
 
 class NistResult:
     def __init__(self, test_name: str, p_value: float, proportion: float):
+        """Data structure for storing information about a single NIST test result.
+        This data structure is constructed by its factory object.
+
+        Args:
+            test_name (str): Name of a test
+            p_value (float): P-value of a test
+            proportion (float): Proportion (see NIST docs)
+        """
         self.test_name = test_name
         self.p_value = p_value
         self.proportion = proportion
@@ -41,8 +49,24 @@ class NistResult:
 
 
 class NistResultFactory:
+    """The factory is designed to help us with NIST results extraction
+    from output files. NIST generates finalAnalysisReport.txt file
+    containing information about all tests executed on a sequence.
+    We just use some simple regular expressions defined above
+    to extract p-values and test names.
+    """
     def make(final_analysis_content: str) -> 'list[NistResult]':
+        """Function that generates list of NistResult objects
+        from finalAnalysisReport.txt content.
+
+        Args:
+            final_analysis_content (str): Content of read finalAnalysisReport.txt saved in String
+
+        Returns:
+            list[NistResult]: Parsed NistResult list
+        """
         execution_result: list[NistResult] = []
+        # find all rows of the result table
         final_analysis_lines = FIND_FINAL_TABLE.findall(final_analysis_content)
         if len(final_analysis_lines) > 0:  # we have at least 1 result
             for line in final_analysis_lines:
