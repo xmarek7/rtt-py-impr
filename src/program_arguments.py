@@ -15,9 +15,9 @@ def parse_arguments() -> argparse.Namespace:
                         required=True)
     parser.add_argument("--extensions", "-e",
                         help="Extension of input files from inputs-dir to test",
-                        type=list,
-                        default=[".rnd"],
-                        action="append")
+                        type=str,
+                        nargs="+",
+                        default=".rnd")
 
     # mutually exclusive arguments
     group = parser.add_mutually_exclusive_group(required=True)
