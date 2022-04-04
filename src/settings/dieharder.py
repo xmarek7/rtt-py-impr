@@ -2,18 +2,33 @@ from tools.misc import parse_test_ids
 
 
 class DieharderVariant:
+    """Each Dieharder test with unique test ID can have multiple configurations.
+    A user is allowed to request the same test to be executed with different parameters.
+    Actually supported custom parameters are [arguments, psamples].
+    Arguments are passed directly as program options to dieharder binary.
+    Psamples attribute changes a default psamples value specified in configuration.
+    Number of variants represents how much instances of a single test will be performed.
+    """
     def __init__(self, arguments: 'list[str]', psamples):
         self.arguments = arguments
         self.psamples = psamples
 
 
 class DieharderTestIdSetting:
+    """DieHarder has a certain number of tests that have unique test IDs.
+    This class holds configured variants for one particular test ID.
+    """
     def __init__(self, test_id: int, variants: 'list[DieharderVariant]'):
         self.test_id: int = test_id
         self.variants = variants
 
 
 class DieharderSettings:
+    """Data structure used for holding information about all user-defined tests.
+    It also holds list of DieharderTestIdSetting elements so for each test_id stored
+    in test_ids attribute there is its own configuration. The class is then used
+    in execution.
+    """
     def __init__(self, test_ids: list, default_psamples, test_configs: 'list[DieharderTestIdSetting]'):
         self.test_ids: list[int] = test_ids
         self.default_psamples = default_psamples
@@ -26,10 +41,25 @@ class DieharderSettings:
 
 
 class DieharderSettingsFactory:
+    """Factory object which serves as a helper for easier configuration parsing
+    from user-specified test config JSON.
+    """
     def make_settings(test_settings_json: dict) -> DieharderSettings:
+        """Consumes loaded test settings JSON in dict and gives back parsed
+        DieharderSettings.
+
+        Args:
+            test_settings_json (dict): Loaded test config JSON
+
+        Raises:
+            RuntimeError: Throw if an incomplete/incorrect config was provided
+
+        Returns:
+            DieharderSettings: JSON data transformed into settings class
+        """
         settings = test_settings_json.get("dieharder-settings")
         if not settings:
-            raise Exception("Configuration 'dieharder-settings' was not specified")
+            raise RuntimeError("Configuration 'dieharder-settings' was not specified")
         dieharder_settings = None
         try:
             defaults = settings["defaults"]

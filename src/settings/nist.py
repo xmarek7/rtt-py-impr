@@ -2,6 +2,9 @@ import tools
 
 
 class NistSettings:
+    """User-defined nist settings are stored here. Unlike TU01 or DieHarder,
+    NIST settings are very simple and currently don't support test variants.
+    """
     def __init__(self, test_ids: list, stream_size, stream_count):
         self.test_ids = test_ids
         self.stream_size = stream_size

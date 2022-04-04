@@ -3,6 +3,9 @@ import os
 
 
 class LoggerSettings:
+    """Holds information of all valid JSON elements that are needed
+    for logging to work correctly.
+    """
     def __init__(self, dict_from: dict):
         self.dir_prefix = os.path.abspath(dict_from["dir-prefix"])
         self.config_entries = [
@@ -45,6 +48,9 @@ class LoggerSettings:
 
 
 class FileStorageSettings:
+    """Contains know-how about valid JSON entries that can be specified
+    in file-storage section specified in general config file
+    """
     def __init__(self, dict_from: dict):
         self.main_file = dict_from["main-file"]
         self.dir_prefix = dict_from["dir-prefix"]
@@ -85,6 +91,8 @@ class FileStorageSettings:
 
 
 class BinariesSettings:
+    """Path to executables of batteries are stored and parsed by this class.
+    """
     def __init__(self, dict_from: dict):
         self.config_entries = [
             "nist-sts",
@@ -112,6 +120,9 @@ class BinariesSettings:
 
 
 class ExecutionSettings:
+    """Settings affecting execution of binaries are stored here.
+    Currently, only test-timeout-seconds config entry has effect.
+    """
     def __init__(self, dict_from: dict):
         self.config_entries = [
             "max-parallel-tests",
@@ -133,6 +144,8 @@ class ExecutionSettings:
 
 
 class GeneralSettings:
+    """Wrapper object connecting all general settings
+    """
     def __init__(self,
                  logger_settings: LoggerSettings,
                  storage_settings: FileStorageSettings,
@@ -145,6 +158,8 @@ class GeneralSettings:
 
 
 class GeneralSettingsFactory:
+    """Factory for easier parsing of general settings
+    """
     def make_general_settings(toolkit_settings_json: str) -> GeneralSettings:
         """Takes json string containing app settings
         and parses it into classes representing general settings.

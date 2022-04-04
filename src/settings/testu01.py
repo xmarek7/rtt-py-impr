@@ -2,6 +2,11 @@ from tools.misc import parse_test_ids
 
 
 class TestU01Variant:
+    """Each TestU01 battery test has its own configuration and multiple configurations
+    are supported, too. If a user wants some tests to be executed multiple times
+    but with slightly different settings, he just specifies variants.
+    The variants are then stored in this object.
+    """
     def __init__(self, repetitions: int = 1, bit_nb: int = None, bit_r: int = None, bit_s=None, bit_w=None):
         self.repetitions = repetitions
         self.bit_nb = bit_nb
@@ -11,12 +16,16 @@ class TestU01Variant:
 
 
 class TestU01TestIdSettings:
+    """Each test with its variants is stored in this object.
+    """
     def __init__(self, test_id, variants: 'list[TestU01Variant]'):
         self.test_id = test_id
         self.variants = variants
 
 
 class TestU01Settings:
+    """Wraps all tests and their configurations.
+    """
     def __init__(self, test_ids: list, subbattery: str, test_id_settings: 'list[TestU01TestIdSettings]'):
         self.test_ids = test_ids
         self.subbattery = subbattery
@@ -24,7 +33,22 @@ class TestU01Settings:
 
 
 class TestU01SettingsFactory:
+    """Helper for making testU01 settings from JSON config.
+    """
     def make_settings(test_settings_json: dict, test_subbattery: str) -> TestU01Settings:
+        """Take JSON as dictionary and for given subbattery (i.e. rabbit, crust, alphabit, etc)
+        produce TestU01Settings object.
+
+        Args:
+            test_settings_json (dict): JSON config as dictionary
+            test_subbattery (str): Name of a subbattery
+
+        Raises:
+            RuntimeError: Throw exeption in case of incomplete/incorrect configuration
+
+        Returns:
+            TestU01Settings: JSON config transformed to settings class
+        """
         # for example, block_alphabit subbattery has config entry 'tu01-blockalphabit-settings'
         # that's why we are replacing '_'
         config_entry = f"tu01-{test_subbattery}-settings".replace("_", "")
