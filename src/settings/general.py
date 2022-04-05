@@ -6,43 +6,17 @@ class LoggerSettings:
     """Holds information of all valid JSON elements that are needed
     for logging to work correctly.
     """
+
     def __init__(self, dict_from: dict):
         self.dir_prefix = os.path.abspath(dict_from["dir-prefix"])
-        self.config_entries = [
-            "run-log-dir",
-            "dieharder-dir",
-            "nist-sts-dir",
-            "tu01-smallcrush-dir",
-            "tu01-crush-dir",
-            "tu01-bigcrush-dir",
-            "tu01-rabbit-dir",
-            "tu01-alphabit-dir",
-            "tu01-blockalphabit-dir",
-            "fips-dir",
-            "bsi-dir",
-        ]
-        self.run_log_dir = None
-        self.dieharder_dir = None
-        self.nist_sts_dir = None
-        self.tu01_smallcrush_dir = None
-        self.tu01_crush_dir = None
-        self.tu01_bigcrush_dir = None
-        self.tu01_rabbit_dir = None
-        self.tu01_alphabit_dir = None
-        self.tu01_blockalphabit_dir = None
-        self.fips_dir = None
-        self.bsi_dir = None
-        for key in self.config_entries:
-            setattr(self, key.replace('-', '_'),
-                    os.path.join(self.dir_prefix, dict_from[key]))
+        self.run_log_dir = os.path.join(
+            self.dir_prefix, dict_from["run-log-dir"])
         self.TIMESTAMP = datetime.datetime.now().isoformat()
 
     def __str__(self):
         __str = "# " + self.__class__.__name__ + " {\n"
-        for key in self.config_entries:
-            __attribute = key.replace('-', '_')
-            __str += "\t" + __attribute + ": " + \
-                getattr(self, __attribute) + "\n"
+        __str += f"\tdir_prefix: {self.dir_prefix}\n"
+        __str += f"\trun_log_fir: {self.run_log_dir}\n"
         __str += "}"
         return __str
 
@@ -51,29 +25,13 @@ class FileStorageSettings:
     """Contains know-how about valid JSON entries that can be specified
     in file-storage section specified in general config file
     """
+
     def __init__(self, dict_from: dict):
-        self.main_file = dict_from["main-file"]
         self.dir_prefix = dict_from["dir-prefix"]
         self.config_entries = [
-            "dieharder-dir",
-            "nist-sts-dir",
-            "tu01-smallcrush-dir",
-            "tu01-crush-dir",
-            "tu01-bigcrush-dir",
-            "tu01-rabbit-dir",
-            "tu01-alphabit-dir",
-            "tu01-blockalphabit-dir",
             "fips-dir",
             "bsi-dir",
         ]
-        self.dieharder_dir = None
-        self.nist_sts_dir = None
-        self.tu01_smallcrush_dir = None
-        self.tu01_crush_dir = None
-        self.tu01_bigcrush_dir = None
-        self.tu01_rabbit_dir = None
-        self.tu01_alphabit_dir = None
-        self.tu01_blockalphabit_dir = None
         self.fips_dir = None
         self.bsi_dir = None
         for key in self.config_entries:
@@ -93,6 +51,7 @@ class FileStorageSettings:
 class BinariesSettings:
     """Path to executables of batteries are stored and parsed by this class.
     """
+
     def __init__(self, dict_from: dict):
         self.config_entries = [
             "nist-sts",
@@ -123,6 +82,7 @@ class ExecutionSettings:
     """Settings affecting execution of binaries are stored here.
     Currently, only test-timeout-seconds config entry has effect.
     """
+
     def __init__(self, dict_from: dict):
         self.config_entries = [
             "max-parallel-tests",
@@ -146,6 +106,7 @@ class ExecutionSettings:
 class GeneralSettings:
     """Wrapper object connecting all general settings
     """
+
     def __init__(self,
                  logger_settings: LoggerSettings,
                  storage_settings: FileStorageSettings,
@@ -179,12 +140,14 @@ class GeneralSettingsFactory:
             print("Failed to parse FILE_STORAGE settings")
             raise err
         try:
-            binaries_settings = BinariesSettings(toolkit_settings_json["binaries"])
+            binaries_settings = BinariesSettings(
+                toolkit_settings_json["binaries"])
         except Exception as err:
             print("Failed to parse BINARIES settings")
             raise err
         try:
-            execution_settings = ExecutionSettings(toolkit_settings_json["execution"])
+            execution_settings = ExecutionSettings(
+                toolkit_settings_json["execution"])
         except Exception as err:
             print("Failed to parse EXECUTION settings")
             raise err

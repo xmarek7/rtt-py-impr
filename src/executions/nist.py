@@ -98,11 +98,6 @@ class NistExecution:
         Args:
             temp_dir (str): Path to a temp directory in which NIST will be executed
         """
-        res_dir = self.storage_settings.nist_sts_dir
-        if not os.path.isdir(res_dir):
-            self.app_logger.info(
-                f"{self.log_prefix} - Output directory {res_dir} does not exist. Creating ...")
-            os.makedirs(res_dir)
         # list of all tests, they must have own subdirectory
         test_result_dirs = [
             "Frequency",
