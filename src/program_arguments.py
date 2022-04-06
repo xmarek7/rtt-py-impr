@@ -18,6 +18,14 @@ def parse_arguments() -> argparse.Namespace:
                         type=str,
                         nargs="+",
                         default=".rnd")
+    parser.add_argument("-af", "--allowed-failure",
+                        help="Failure percentage of a test. Failure percentage calculation: 1 - passed_tests_count / executed_tests",
+                        type=float,
+                        default=0.04)
+    parser.add_argument("--alpha",
+                        help="Value of alpha to be used for evaluation: test p_value > alpha -> test passed",
+                        type=float,
+                        default=0.01)
 
     # mutually exclusive arguments
     group = parser.add_mutually_exclusive_group(required=True)

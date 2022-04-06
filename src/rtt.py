@@ -57,9 +57,8 @@ def init_logging(settings: LoggerSettings) -> logging.Logger:
 def main(args: argparse.Namespace):
     THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
-    # TODO: move rejection_threshold and alpha to program arguments
-    decision_threshold = 0.04
-    alpha = 0.01
+    allowed_failure = args.allowed_failure
+    alpha = args.alpha
 
     general_settings = args.general_settings
     test_settings = args.test_settings
@@ -319,7 +318,7 @@ def main(args: argparse.Namespace):
     # generate csv
     try:
         df = generate_csv_report(
-            input_files, configured_batteries, full_report, alpha, decision_threshold)
+            input_files, configured_batteries, full_report, alpha, allowed_failure)
         df.to_csv(csv_file)
     except Exception as err:
         main_logger.error(f"Failed to generate CSV report. Reason: {err}")
