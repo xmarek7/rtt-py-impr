@@ -1,3 +1,6 @@
+from results.result_type import ResultType
+
+
 class FipsResult:
     """Wrap result of single FIPS test into a class.
     Since FIPS is a very small battery and is extremely simple,
@@ -18,6 +21,7 @@ class FipsResult:
         self.test_name = test_name
         self.num_failures = num_failures
         self.num_runs = num_runs
+        self.result_type = ResultType.NUM_FAILURES
 
     def __repr__(self):
         return "FipsResult {\n" \

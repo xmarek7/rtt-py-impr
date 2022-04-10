@@ -1,3 +1,6 @@
+from results.result_type import ResultType
+
+
 class DieharderResult:
     """Wrap result of single DieHarder test into a class.
     The most important attribute is p_value because it is
@@ -23,6 +26,7 @@ class DieharderResult:
         self.tsamples = tsamples
         self.psamples = psamples
         self.p_value = pvalue
+        self.result_type = ResultType.P_VALUE
 
     def __repr__(self):
         return "DieharderResult {\n" \

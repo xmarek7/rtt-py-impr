@@ -1,5 +1,7 @@
 import re
 
+from results.result_type import ResultType
+
 # this constant splits multiple repetitions into a list.
 # if we look at some example results that TestU01 battery prints out
 # we can see that if repetitions parameter is > 1, there are multiple results
@@ -59,6 +61,7 @@ class TestU01Result:
         self.test_name = test_name
         self.statistics = statistics
         self.p_value = p_value
+        self.result_type = ResultType.P_VALUE
 
     def __repr__(self):
         return "TestU01Result {\n" \

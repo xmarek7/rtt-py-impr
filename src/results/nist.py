@@ -1,5 +1,7 @@
 import re
 
+from results.result_type import ResultType
+
 # assess produces finalAnalysisReport.txt file from each execution
 # one line looks like this:
 #   3  14  10  11   5   9   6   9   6   7  0.227773   1.0000    Frequency
@@ -34,6 +36,7 @@ class NistResult:
         self.test_name = test_name
         self.p_value = p_value
         self.proportion = proportion
+        self.result_type = ResultType.P_VALUE
 
     def __repr__(self):
         return "NistResult {" \

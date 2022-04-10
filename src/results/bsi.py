@@ -1,3 +1,6 @@
+from results.result_type import ResultType
+
+
 class BsiResult:
     """Wrap result of single BSI test into a class.
         Each BSI test has a result that says if there was an error
@@ -17,6 +20,7 @@ class BsiResult:
         self.has_error = has_error
         self.num_runs = num_runs
         self.num_failures = num_failures
+        self.result_type = ResultType.NUM_FAILURES
 
     def __repr__(self):
         return "BsiResult {\n" \

@@ -4,6 +4,7 @@ import pandas as pd
 
 from results.bsi import BsiResult
 from results.fips import FipsResult
+from results.result_type import ResultType
 
 
 def generate_csv_report(tested_files: list, batteries: list, report: dict, alpha: float = 0.01, rejection_threshold: float = 0.04) -> pd.DataFrame:
@@ -34,19 +35,24 @@ def generate_csv_report(tested_files: list, batteries: list, report: dict, alpha
                 test_result_idx = 0  # needed to have unique indexes
                 for test_result in test_results:
                     # indexing: rows are test names and cols are files
-                    df.at[f"{test_result.test_name}_{test_result_idx} ({battery.upper()})", file] = extract_value_from_result(
-                        test_result)
+                    result_data = None
+                    if test_result.result_type == ResultType.P_VALUE:
+                        result_data = test_result.p_value
+                    elif test_result.result_type == ResultType.NUM_FAILURES:
+                        result_data = test_result.num_failures
+                    df.at[f"{test_result.test_name}_{test_result_idx} ({battery.upper()})",
+                          file] = result_data
                     test_result_idx += 1
 
     rejection_column = "Failure rate"
     df.insert(0, rejection_column, None)
     for i in range(len(df)):
         test_name = str(df.iloc[i].name)
-        battery = determine_battery(test_name)
-        if battery in ["BSI", "FIPS"]:  # num_failures
+        result_type = get_result_type_by_test_name(test_name)
+        if result_type == ResultType.NUM_FAILURES:
             df.at[test_name, rejection_column] = 1 - \
                 (df.iloc[i, 1:] == 0).sum() / df.iloc[i, 1:].count()
-        else:
+        elif result_type == ResultType.P_VALUE:
             df.at[test_name, rejection_column] = 1 - \
                 (df.iloc[i, 1:] > alpha).sum() / df.iloc[i, 1:].count()
 
@@ -100,28 +106,9 @@ def find_test_results_for_file(tested_file: str, test_name: str, report: dict) -
     return test_result
 
 
-def extract_value_from_result(result) -> float:
-    """Decide whether to take number of failed runs or p-values.
-    Only FIPS and BSI have num_failures attributes. Other batteries
-    give p-values as result.
-
-    Args:
-        result (_type_): Result instance
-
-    Returns:
-        float: P-value or number of failed runs
-    """
-    # FIPS and BSI results are represented as number of failures
-    if isinstance(result, BsiResult) or isinstance(result, FipsResult):
-        return result.num_failures
-    # rest of the batteries have p-value results
-    else:
-        return result.p_value
-
-
-def determine_battery(test_name: str) -> str:
-    """Extract battery name from test_name. Test names in DataFrame
-    are stored as "{test_name} (battery_name)" so it's easy to extract
+def get_result_type_by_test_name(test_name: str) -> ResultType:
+    """Extract battery name from test_name and return its ResultType enum value.
+    Test names in DataFrame are stored as "{test_name} (battery_name)" so it's easy to extract
     battery name from test_name with regex.
 
     Args:
@@ -133,5 +120,9 @@ def determine_battery(test_name: str) -> str:
     rgx = re.compile(r".* \((.*)\)$")
     match = rgx.match(test_name)
     if match:
-        return match.group(1)
-    return None
+        battery_name = match.group(1)
+        if battery_name in ["FIPS", "BSI"]:
+            return ResultType.NUM_FAILURES
+        elif battery_name in ["NIST", "DIEHARDER", "RABBIT", "ALPHABIT", "BLOCK_ALPHABIT"]:
+            return ResultType.P_VALUE
+    return ResultType.UNKNOWN
