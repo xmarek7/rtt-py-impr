@@ -1,7 +1,8 @@
 from results.result_type import ResultType
+from results.base_result import BaseResult
 
 
-class FipsResult:
+class FipsResult(BaseResult):
     """Wrap result of single FIPS test into a class.
     Since FIPS is a very small battery and is extremely simple,
     it produces only a number of failures and a number of runs

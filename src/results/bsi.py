@@ -1,7 +1,8 @@
 from results.result_type import ResultType
+from results.base_result import BaseResult
 
 
-class BsiResult:
+class BsiResult(BaseResult):
     """Wrap result of single BSI test into a class.
         Each BSI test has a result that says if there was an error
         and if not, number of all runs and number of failed runs are returned

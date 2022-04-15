@@ -1,6 +1,8 @@
 import re
 
 from results.result_type import ResultType
+from results.base_result import BaseResult
+
 
 # this constant splits multiple repetitions into a list.
 # if we look at some example results that TestU01 battery prints out
@@ -47,7 +49,7 @@ EXTRACT_PVALUES_NEAR_0_REGEX = re.compile(
 EXTRACT_TEST_NAME = re.compile(r"(^.*) test:\n-{47}")
 
 
-class TestU01Result:
+class TestU01Result(BaseResult):
     """Wraps result of one of the TestU01 battery tests.
     """
     def __init__(self, test_name, statistics: str, p_value: float):

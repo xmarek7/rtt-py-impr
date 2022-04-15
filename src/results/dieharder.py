@@ -1,7 +1,7 @@
 from results.result_type import ResultType
+from results.base_result import BaseResult
 
-
-class DieharderResult:
+class DieharderResult(BaseResult):
     """Wrap result of single DieHarder test into a class.
     The most important attribute is p_value because it is
     used for overall evaluation and has impact on final decision

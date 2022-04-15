@@ -1,6 +1,7 @@
 import re
 
 from results.result_type import ResultType
+from results.base_result import BaseResult
 
 # assess produces finalAnalysisReport.txt file from each execution
 # one line looks like this:
@@ -21,7 +22,7 @@ FIND_FINAL_TABLE = re.compile(r"[^\s]*\d\.\d+\s+\d\.\d+\s+\w+\b")
 EXTRACT_ONE_LINE = re.compile(r"^(\d\.\d+)\s+(\d\.\d+)\s+(\S+)\b")
 
 
-class NistResult:
+class NistResult(BaseResult):
     """Data structure for storing information about a single NIST test result.
     This data structure is constructed by its factory object.
     """
