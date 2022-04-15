@@ -34,14 +34,14 @@ class NistResult:
             proportion (float): Proportion (see NIST docs)
         """
         self.test_name = test_name
-        self.p_value = p_value
+        self.result_value = p_value
         self.proportion = proportion
         self.result_type = ResultType.P_VALUE
 
     def __repr__(self):
         return "NistResult {" \
             f"\ttest_name: {self.test_name},\n" \
-            f"\tp_value: {self.p_value},\n" \
+            f"\tpvalue: {self.result_value},\n" \
             f"\tproportion: {self.proportion},\n" \
             "}"
             
@@ -49,7 +49,7 @@ class NistResult:
         if type(self) != type(other):
             return False
         return self.test_name == other.test_name and \
-            self.p_value == other.p_value and \
+            self.result_value == other.result_value and \
             self.proportion == other.proportion
 
 

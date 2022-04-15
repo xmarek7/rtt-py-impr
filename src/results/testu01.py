@@ -60,13 +60,13 @@ class TestU01Result:
         """
         self.test_name = test_name
         self.statistics = statistics
-        self.p_value = p_value
+        self.result_value = p_value
         self.result_type = ResultType.P_VALUE
 
     def __repr__(self):
         return "TestU01Result {\n" \
             f"\tstatistics: {self.statistics},\n" \
-            f"\tp-value: {self.p_value},\n" \
+            f"\tpvalue: {self.result_value},\n" \
             "}"
 
 

@@ -25,7 +25,7 @@ class DieharderResult:
         self.ntuples = ntuples
         self.tsamples = tsamples
         self.psamples = psamples
-        self.p_value = pvalue
+        self.result_value = pvalue
         self.result_type = ResultType.P_VALUE
 
     def __repr__(self):
@@ -35,5 +35,5 @@ class DieharderResult:
             f"\tntuples: {self.ntuples},\n" \
             f"\ttsamples: {self.tsamples},\n" \
             f"\tpsamples: {self.psamples},\n" \
-            f"\tpvalue: {self.p_value}\n" \
+            f"\tpvalue: {self.result_value}\n" \
             "}"

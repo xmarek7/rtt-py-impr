@@ -94,8 +94,8 @@ class TestTestU01StdoutParsing(unittest.TestCase):
     def test_parse_and_check_pvals(self):
         results = TestU01ResultFactory.make_result(STDOUT_STR_2_REPS)
         assert len(results) == 2
-        assert results[0].p_value == 0.87
-        assert results[1].p_value == 0.77
+        assert results[0].result_value == 0.87
+        assert results[1].result_value == 0.77
 
     def test_parse_and_check_statistics_exact(self):
         results = TestU01ResultFactory.make_result(STDOUT_STR_2_REPS)
@@ -107,7 +107,7 @@ class TestTestU01StdoutParsing(unittest.TestCase):
         results = TestU01ResultFactory.make_result(STDOUT_STR_1_REP)
         assert len(results) == 1
         assert results[0].statistics == STDOUT_2_REPS_STATS[0]
-        assert results[0].p_value == 0.87
+        assert results[0].result_value == 0.87
 
 if __name__ == "__main__":
     unittest.main()

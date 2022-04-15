@@ -35,13 +35,8 @@ def generate_csv_report(tested_files: list, batteries: list, report: dict, alpha
                 test_result_idx = 0  # needed to have unique indexes
                 for test_result in test_results:
                     # indexing: rows are test names and cols are files
-                    result_data = None
-                    if test_result.result_type == ResultType.P_VALUE:
-                        result_data = test_result.p_value
-                    elif test_result.result_type == ResultType.NUM_FAILURES:
-                        result_data = test_result.num_failures
                     df.at[f"{test_result.test_name}_{test_result_idx} ({battery.upper()})",
-                          file] = result_data
+                          file] = test_result.result_value
                     test_result_idx += 1
 
     rejection_column = "Failure rate"

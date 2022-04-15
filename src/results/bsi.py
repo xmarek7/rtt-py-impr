@@ -19,7 +19,7 @@ class BsiResult:
         self.test_name = test_name
         self.has_error = has_error
         self.num_runs = num_runs
-        self.num_failures = num_failures
+        self.result_value = num_failures
         self.result_type = ResultType.NUM_FAILURES
 
     def __repr__(self):
@@ -27,5 +27,6 @@ class BsiResult:
             f"\ttest_name: {self.test_name},\n" \
             f"\thas_error: {self.has_error},\n" \
             f"\tnum_runs: {self.num_runs},\n" \
-            f"\tnum_failures: {self.num_failures}\n" \
+            f"\tnum_failures: {self.result_value}\n" \
+            f"\tresult_type: {self.result_type}\n" \
             "}"

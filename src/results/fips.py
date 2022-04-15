@@ -19,7 +19,7 @@ class FipsResult:
         """
         self.battery_accepted = battery_accepted
         self.test_name = test_name
-        self.num_failures = num_failures
+        self.result_value = num_failures
         self.num_runs = num_runs
         self.result_type = ResultType.NUM_FAILURES
 
@@ -27,6 +27,6 @@ class FipsResult:
         return "FipsResult {\n" \
             f"\tbattery_accepted: {self.battery_accepted},\n" \
             f"\ttest_name: {self.test_name},\n" \
-            f"\tnum_failures: {self.num_failures},\n" \
+            f"\tnum_failures: {self.result_value},\n" \
             f"\tnum_runs: {self.num_runs}\n" \
             "}"

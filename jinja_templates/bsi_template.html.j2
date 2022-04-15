@@ -11,7 +11,7 @@
     {% for res in list_of_results:%}
     {% if res.has_error %}
     <div class="bsi-error">
-    {% elif res.num_failures > 0 %}
+    {% elif res.result_value > 0 %}
     <div class="bsi-failed">
     {% else %}
     <div class="bsi-passed">
@@ -24,7 +24,7 @@
             </tr>
             <tr class="bsi">
                 <th class="bsi">Failed runs</th>
-                <td class="bsi">{{ res.num_failures }}</td>
+                <td class="bsi">{{ res.result_value }}</td>
             </tr>
             <tr class="bsi">
                 <th class="bsi">Runs</th>
