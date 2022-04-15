@@ -20,7 +20,7 @@ NIST_JSON = """
 
 def _get_nist_settings() -> NistSettings:
     return NistSettingsFactory.make_settings(
-        json.loads(NIST_JSON)["nist-sts-settings"])
+        json.loads(NIST_JSON))
 
 
 class TestNistParsing(unittest.TestCase):

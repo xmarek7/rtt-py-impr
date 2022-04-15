@@ -1,6 +1,4 @@
-import os
 import unittest
-import pytest
 
 from results.testu01 import TestU01ResultFactory, TestU01Result
 

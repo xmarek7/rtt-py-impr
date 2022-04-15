@@ -1,7 +1,7 @@
 import unittest
 
 from results.nist import NistResultFactory, NistResult
-from assets.test_variables import NIST_FINAL_ANALYSIS_REPORT_PARSED
+from tests.assets.test_variables import NIST_FINAL_ANALYSIS_REPORT_PARSED
 
 # !!!! CHANGES CAN CAUSE TEST FAILURES !!!!
 FINAL_ANALYSIS_EXAMPLE = """

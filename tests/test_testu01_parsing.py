@@ -1,7 +1,7 @@
 import unittest
 import json
 
-from settings.testu01 import TestU01Settings, TestU01SettingsFactory
+from settings.testu01 import TestU01Settings as TU01Settings, TestU01SettingsFactory as TU01SettingsFactory
 
 
 RABBIT_JSON = """
@@ -145,22 +145,22 @@ SAMPLE_JSON = """
 """
 
 
-def _get_rabbit() -> TestU01Settings:
-    return TestU01SettingsFactory.make_settings(
-        json.loads(RABBIT_JSON)["tu01-rabbit-settings"], "rabbit")
+def _get_rabbit() -> TU01Settings:
+    return TU01SettingsFactory.make_settings(
+        json.loads(RABBIT_JSON), "rabbit")
 
 
-def _get_alphabit() -> TestU01Settings:
-    return TestU01SettingsFactory.make_settings(
-        json.loads(ALPHABIT_JSON)["tu01-alphabit-settings"], "alphabit")
+def _get_alphabit() -> TU01Settings:
+    return TU01SettingsFactory.make_settings(
+        json.loads(ALPHABIT_JSON), "alphabit")
 
 
-def _get_blockalphabit() -> TestU01Settings:
-    return TestU01SettingsFactory.make_settings(
-        json.loads(BLOCKALPHABIT_JSON)["tu01-blockalphabit-settings"], "block_alphabit")
+def _get_blockalphabit() -> TU01Settings:
+    return TU01SettingsFactory.make_settings(
+        json.loads(BLOCKALPHABIT_JSON), "block_alphabit")
 
 
-class TestU01Parsing(unittest.TestCase):
+class TU01Parsing(unittest.TestCase):
     def test_correctness_rabbit(self):
         rabbit = _get_rabbit()
         assert rabbit.test_ids == [1, 2]

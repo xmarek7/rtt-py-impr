@@ -34,7 +34,7 @@ DIEHARD_JSON = """
 
 def _get_dieharder_settings() -> DieharderSettings:
     return DieharderSettingsFactory.make_settings(
-        json.loads(DIEHARD_JSON)["dieharder-settings"])
+        json.loads(DIEHARD_JSON))
 
 
 class TestDieharderParsing(unittest.TestCase):

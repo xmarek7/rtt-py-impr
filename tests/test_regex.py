@@ -29,9 +29,9 @@ class TestRegexMatching(unittest.TestCase):
     def test_tu01_find_pvalues(self):
         result = FIND_PVALUES_REGEX.findall(tu01_result_example)
         assert len(result) == 3
-        assert result[0] == "0.1234"
-        assert result[1] == "8.9e-5    *****"
-        assert result[2] == "1 -  8.9e-5    *****"
+        assert result[0] == tu01_pval_basic
+        assert result[1] == tu01_pval_close_to_0
+        assert result[2] == tu01_pval_close_to_1
 
     def test_tu01_fallbacks(self):
         def _extract_pval(string):
