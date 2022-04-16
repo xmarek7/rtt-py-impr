@@ -1,12 +1,15 @@
 {
     "randomness-testing-toolkit": {
         "bsi-settings": {
-            "test-ids": ["0-4", "6-8"],
-            "uniform-distribution": {
-                "K-param": 1,
-                "N-param": 100000,
-                "A-param": 0.025
-            }
+            "defaults": {
+                "test-ids": ["0-4", "6-8"],
+                "uniform-distribution": {
+                    "K-param": 1,
+                    "N-param": 100000,
+                    "A-param": 0.025
+                }
+            },
+            "test-specific-settings": null
         },
         "fips-settings": null,
         "dieharder-settings": {

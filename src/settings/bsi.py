@@ -20,8 +20,8 @@ class BsiSettings:
         self.uniform_dist_N = None
         self.uniform_dist_A = None
         try:
-            self.test_ids = parse_test_ids(settings["test-ids"])
-            uniform_dist = settings.get("uniform-distribution")
+            self.test_ids = parse_test_ids(settings["defaults"]["test-ids"])
+            uniform_dist = settings["defaults"].get("uniform-distribution")
             if uniform_dist is not None:
                 self.uniform_dist_K = str(uniform_dist["K-param"])
                 self.uniform_dist_N = str(uniform_dist["N-param"])

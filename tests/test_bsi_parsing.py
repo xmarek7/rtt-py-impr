@@ -7,11 +7,13 @@ from settings.bsi import BsiSettings
 BSI_JSON = """
 {
     "bsi-settings": {
-        "test-ids": ["0-8"],
-        "uniform-distribution": {
-            "K-param": 123,
-            "N-param": 456,
-            "A-param": 789
+        "defaults": {
+            "test-ids": ["0-8"],
+            "uniform-distribution": {
+                "K-param": 123,
+                "N-param": 456,
+                "A-param": 789
+            }
         }
     }
 }
@@ -20,9 +22,11 @@ BSI_JSON = """
 NO_UNIFORM_JSON = """
 {
     "bsi-settings": {
-        "test-ids": ["0-5"],
-        "not-a-uniform-distribution": {
-            "K-param": 123
+        "defaults": {
+            "test-ids": ["0-5"],
+            "not-a-uniform-distribution": {
+                "K-param": 123
+            }
         }
     }
 }
@@ -31,9 +35,11 @@ NO_UNIFORM_JSON = """
 BAD_UNIFORM_PARAM_JSON = """
 {
     "bsi-settings": {
-        "test-ids": ["0-5"],
-        "uniform-distribution": {
-            "NOT-a-param": 123
+        "defaults": {
+            "test-ids": ["0-5"],
+            "uniform-distribution": {
+                "NOT-a-param": 123
+            }
         }
     }
 }
