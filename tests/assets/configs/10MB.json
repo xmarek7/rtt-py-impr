@@ -90,10 +90,25 @@
         "nist-sts-settings": {
             "defaults": {
                 "test-ids": ["1-15"],
-                "stream-size": "1000000",
+                "stream-size": "10000000",
                 "stream-count": "80"
             },
-            "test-specific-settings": []
+            "test-specific-settings": [
+                {
+                    "test-id": 2,
+                    "block-length": 10,
+                    "stream-size": "10000000",
+                    "stream-count": "80"
+                },
+                {
+                    "test-id": 11,
+                    "variants": [
+                        { "block-length": 8, "stream-size": "9999999", "stream-count": "79"},
+                        { "block-length": 10, "stream-count": "78"},
+                        { "block-length": 12, "stream-size": "9999888"}
+                    ]
+                }
+            ]
         },
 
         "tu01-rabbit-settings": {
