@@ -21,6 +21,7 @@ class BsiSettings:
         self.uniform_dist_A = None
         try:
             self.test_ids = parse_test_ids(settings["defaults"]["test-ids"])
+            self.bytes_count = settings["defaults"]["bytes-count"]
             uniform_dist = settings["defaults"].get("uniform-distribution")
             if uniform_dist is not None:
                 self.uniform_dist_K = str(uniform_dist["K-param"])

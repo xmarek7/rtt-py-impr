@@ -32,17 +32,10 @@ class BsiExecution:
         Returns:
             list[BsiResult]: Results of performed tests
         """
-        self.prepare_output_dirs()
         execution_result: list[BsiResult] = []
-        output_filename = str(self.logger_settings.TIMESTAMP) + "_" + \
-            os.path.splitext(os.path.basename(sequence_path))[0] + ".json"
-        out_file = os.path.join(self.storage_settings.bsi_dir, output_filename)
-        self.app_logger.info(
-            f"{self.log_prefix} - Results will be saved to {out_file}")
         process_args = [self.binaries_settings.bsi, "--input_file",
-                        sequence_path, "--output_file", out_file]
+                        sequence_path, "--bytes_count", str(self.battery_settings.bytes_count)]
         process_args.extend(self.get_skip_test_args())
-
         if self.battery_settings.uniform_dist_K is not None:
             process_args.extend(["-K", self.battery_settings.uniform_dist_K])
         if self.battery_settings.uniform_dist_N is not None:
@@ -100,10 +93,4 @@ class BsiExecution:
         return skip_args
 
     def prepare_output_dirs(self):
-        """Prepares a directory structure for run.
-        """
-        res_dir = self.storage_settings.bsi_dir
-        if not os.path.isdir(res_dir):
-            self.app_logger.info(
-                f"{self.log_prefix} - Creating output directory {res_dir}.")
-            os.makedirs(res_dir)
+        pass

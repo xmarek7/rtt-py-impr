@@ -3,6 +3,7 @@
         "bsi-settings": {
             "defaults": {
                 "test-ids": ["0-4", "6-8"],
+                "bytes-count": 10000000,
                 "uniform-distribution": {
                     "K-param": 1,
                     "N-param": 100000,
@@ -11,7 +12,11 @@
             },
             "test-specific-settings": null
         },
-        "fips-settings": null,
+        "fips-settings": {
+            "defaults": {
+                "bytes-count": 10000000
+            }
+        },
         "dieharder-settings": {
             "defaults": {
                 "test-ids": ["0-3", "100-102", "200-204"],

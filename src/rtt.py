@@ -6,6 +6,7 @@ import logging
 from shutil import copytree
 
 from settings.bsi import BsiSettings
+from settings.fips import FipsSettings
 from settings.nist import NistSettingsFactory
 from settings.testu01 import TestU01SettingsFactory
 from settings.dieharder import DieharderSettingsFactory
@@ -132,6 +133,18 @@ def main(args: argparse.Namespace):
             f"Settings for BSI battery provided in file {test_settings} are not valid. Reason:\n{err}")
         main_logger.warn("Tests from BSI battery will not be executed")
 
+    # fips test settings
+    fips_settings = None
+    try:
+        if not args.no_fips:
+            fips_settings = FipsSettings(test_settings)
+        else:
+            main_logger.info("FIPS battery was omitted by user")
+    except Exception as err:
+        main_logger.warn(
+            f"Settings for FIPS battery provided in file {test_settings} are not valid. Reason:\n{err}")
+        main_logger.warn("Tests from FIPS battery will not be executed")
+
     # nist test settings
     nist_settings = None
     try:
@@ -205,7 +218,7 @@ def main(args: argparse.Namespace):
     if not args.no_fips:
         run_instance.update({
             "fips": {
-                "execution_class": FipsExecution(general_settings),
+                "execution_class": FipsExecution(fips_settings, general_settings),
                 "results": list(),
                 "html_summary": list(),
             }

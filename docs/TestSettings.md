@@ -25,6 +25,7 @@ If you want to fully understand what some parameters mean and how they can affec
 ### Bsi-settings property
 BSI battery has 9 tests and their test IDs go from 0 to 8. Uniform distribution test can be configured with K, N and A parameters. If they are not provided, battery's default values are used
 - test-ids: list of test IDs, ranges (i.e. "0-8" are supported
+- bytes-count: number of bytes to be read from an input file
 - uniform-distribution: contains K-param, N-param, A-param properties \
 Example:
 ```json
@@ -32,6 +33,7 @@ Example:
   "randomness-testing-toolkit": {
     "bsi-settings": {
       "test-ids": ["0", "1", "2-5", "8"],
+      "bytes-count": 10000000,
       "uniform-distribution": {
         "K-param": 1,
         "N-param": 2,
@@ -44,13 +46,17 @@ Example:
 ```
 
 ### Fips-settings property
-They can be null:
+They just hold information about how many bytes should be read from input file:
 ```json
 {
-  "fips-settings": null
+  "fips-settings": {
+    "defaults": {
+      "bytes-count": 10000000
+    }
+  }
 }
 ```
-This property is there for future improvements but currently, FIPS binary does not support any additional arguments except the basic ones (input file, output file)
+FIPS binary currently does not support any additional arguments for tests except the basic ones (input file, output file, bytes count)
 
 ### Dieharder-settings property
 User provides defaults: test-ids and psamples properties. Then some test-specific-settings can be configured.
