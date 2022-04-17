@@ -326,17 +326,17 @@ def main(args: argparse.Namespace):
     csv_file = os.path.join(
         general_settings.storage.dir_prefix, "csv", general_settings.logger.TIMESTAMP, "report.csv")
     os.makedirs(os.path.dirname(csv_file))
-    main_logger.info(f"Saving CSV report into: {csv_file}")
 
     # generate csv
     try:
         df = generate_csv_report(
             input_files, configured_batteries, full_report, alpha, allowed_failure)
         df.to_csv(csv_file)
+        main_logger.info(f"Saving CSV report into: {csv_file}")
     except Exception as err:
         main_logger.error(f"Failed to generate CSV report. Reason: {err}")
         sys.exit(1)
-    
+
     # save csv as html
     try:
         html_results_table = df.to_html()

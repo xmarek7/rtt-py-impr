@@ -9,6 +9,7 @@ BSI_JSON = """
     "bsi-settings": {
         "defaults": {
             "test-ids": ["0-8"],
+            "bytes-count": 300000,
             "uniform-distribution": {
                 "K-param": 123,
                 "N-param": 456,
@@ -24,6 +25,7 @@ NO_UNIFORM_JSON = """
     "bsi-settings": {
         "defaults": {
             "test-ids": ["0-5"],
+            "bytes-count": 3000,
             "not-a-uniform-distribution": {
                 "K-param": 123
             }
@@ -37,6 +39,7 @@ BAD_UNIFORM_PARAM_JSON = """
     "bsi-settings": {
         "defaults": {
             "test-ids": ["0-5"],
+            "bytes-count": 30,
             "uniform-distribution": {
                 "NOT-a-param": 123
             }
