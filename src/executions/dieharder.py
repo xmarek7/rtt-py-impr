@@ -79,7 +79,6 @@ class DieharderExecution:
                     #   DieharderResult{name: test_a, ntuple: 2, tsamples: 3, psamples: 4, p-value: 0.5}]
                     stdout = test_execution.stdout.read().decode("utf-8")
                     output_lines = stdout.split("\n")
-                    print(stdout)
                     for output_line in output_lines:
                         # if you split one line, you get 2 strings.
                         # one of them is '', therefore the length check is here
