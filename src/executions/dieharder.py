@@ -78,6 +78,7 @@ class DieharderExecution:
                     #   DieharderResult{name: test_a, ntuple: 1, tsamples: 2, psamples: 3, p-value: 0.4}
                     #   DieharderResult{name: test_a, ntuple: 2, tsamples: 3, psamples: 4, p-value: 0.5}]
                     stdout = test_execution.stdout.read().decode("utf-8")
+                    print(test_execution.stderr.read().decode("utf-8"))
                     output_lines = stdout.split("\n")
                     for output_line in output_lines:
                         # if you split one line, you get 2 strings.
