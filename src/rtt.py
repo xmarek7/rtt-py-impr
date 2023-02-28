@@ -331,7 +331,7 @@ def main(args: argparse.Namespace):
     try:
         df = generate_csv_report(
             input_files, configured_batteries, full_report, alpha, allowed_failure)
-        df.to_csv(csv_file)
+        df.to_csv(csv_file, float_format="{:.8f}".format)
         main_logger.info(f"Saving CSV report into: {csv_file}")
     except Exception as err:
         main_logger.error(f"Failed to generate CSV report. Reason: {err}")
